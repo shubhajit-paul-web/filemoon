@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Signup - Filemoon</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+	</head>
+	<body class="bg-zinc-100 min-h-screen flex justify-center items-center">
+		<div class="min-w-[30rem] py-6 px-8 bg-white rounded-xl animate__animated animate__pulse">
+			<div class="flex justify-center items-center flex-col gap-1">
+				<i class="ri-contrast-2-fill text-5xl text-purple-500 leading-none animate__animated animate__rotateIn"></i>
+				<h1 class="text-[1.9rem] font-bold text-zinc-700/90">Filemoon</h1>
+			</div>
+			<form class="mt-8 w-full flex flex-col gap-2">
+				<div>
+					<label class="block text-lg font-medium text-zinc-500/90" for="fullname">Full name</label>
+					<input class="w-full border-1 border-zinc-200 p-3 rounded-md" type="text" name="fullname" id="fullname" placeholder="John Doe" required />
+				</div>
+				<div>
+					<label class="block text-lg font-medium text-zinc-500/90" for="email">Email</label>
+					<input class="w-full border-1 border-zinc-200 p-3 rounded-md" type="email" name="email" id="email" placeholder="example@gmail.com" required />
+				</div>
+				<div>
+					<label class="block text-lg font-medium text-zinc-500/90" for="phone">Phone number</label>
+					<input class="w-full border-1 border-zinc-200 p-3 rounded-md" type="email" name="phone" id="phone" placeholder="+910123456789" required />
+				</div>
+				<div>
+					<label class="block text-lg font-medium text-zinc-500/80" for="password">Password</label>
+					<input class="w-full border-1 border-zinc-200 p-3 rounded-md" type="password" name="password" id="password" placeholder="**********" required />
+				</div>
+				<button class="font-medium bg-purple-500 w-full text-center p-3 text-zinc-100 cursor-pointer rounded-md mt-5 hover:bg-purple-700 duration-200" type="submit">Signup</button>
+			</form>
+			<div class="text-center flex justify-center items-center gap-2 mt-5">
+				<p class="opacity-75">Already have an account?</p>
+				<a class="text-green-500 font-medium" href="#">Signin</a>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "filemoon",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon server.js",
+    "prod": "cross-env NODE_ENV=prod node server.js"
+  },
+  "keywords": [],
+  "author": "Shubhajit Paul",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cross-env": "^10.1.0",
+    "dotenv-flow": "^4.1.0",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.1.5",
+    "morgan": "^1.10.1",
+    "winston": "^3.19.0"
+  }
+}

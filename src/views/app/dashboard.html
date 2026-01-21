@@ -10,17 +10,27 @@
 	</head>
 	<body class="bg-zinc-100 min-h-screen flex">
 		<!-- Sidebar -->
-		<aside class="h-screen bg-white border-r-1 border-zinc-300 w-[24vw] flex justify-center p-5" id="sidebar">
+		<aside class="bg-white w-[24vw] h-screen border-r-1 border-zinc-300 flex flex-col items-center px-6 py-8" id="sidebar">
 			<!-- User Profile -->
-			<div>
-				<div class="border w-[6rem] h-[6rem] rounded-full overflow-hidden">
-					<img class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
+			<div class="h-fit flex flex-col justify-center items-center">
+				<div class="bg-white border-1 border-zinc-200 w-[6rem] h-[6rem] rounded-full overflow-hidden">
+					<img class="w-full h-full object-cover object-center" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
 				</div>
-				<p>Shubhajit Paul</p>
+				<p class="text-xl mt-2 font-medium text-slate-800">Shubhajit Paul</p>
+				<p class="text-sm text-slate-500 mt-1">shubhajit@gmail.com</p>
+			</div>
+
+			<!-- Menu items -->
+			<div class="mt-10 w-full text-center flex flex-col gap-3">
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-dashboard-line"></i> Dashboard </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-file-line"></i> My Files </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-history-line"></i> History </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-logout-circle-line"></i> Logout </a>
 			</div>
 		</aside>
+
 		<!-- Dashboard -->
-		<div class="w-full min-h-screen bg-zinc-100">
+		<div class="w-full min-h-screen bg-slate-100">
 			<!-- Header -->
 			<header class="bg-white h-18 py-3 px-8 flex justify-between items-center">
 				<!-- Logo -->
@@ -29,8 +39,86 @@
 					<h1 class="text-2xl font-bold text-zinc-700/90 leading-none">Filemoon</h1>
 				</div>
 				<!-- Menu icon -->
-				<i class="ri-menu-line text-2xl cursor-pointer px-2.5 py-1 bg-zinc-200/50 rounded-md" id="toggle-sidebar-btn"></i>
+				<div>
+					<i class="ri-logout-circle-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-rose-400 text-white/90 rounded-md"></i>
+					<i class="ri-menu-2-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-zinc-200/80 rounded-md" id="toggle-sidebar-btn"></i>
+				</div>
 			</header>
+
+			<!-- Dashboard Section -->
+			<section class="p-7">
+				<p class="text-lg font-medium text-slate-700 mb-4">Dashboard</p>
+
+				<!-- Metrics -->
+				<div class="flex items-center gap-3">
+					<div class="min-w-70 max-w-90 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
+						<div
+							class="w-22 h-22 flex justify-center items-center rounded-full"
+							style="
+								background: #373b44; /* fallback for old browsers */
+								background: -webkit-linear-gradient(to right, #4286f4, #373b44); /* Chrome 10-25, Safari 5.1-6 */
+								background: linear-gradient(to right, #4286f4, #373b44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+							">
+							<i class="ri-live-line text-3xl text-white"></i>
+						</div>
+						<div class="text-center">
+							<p class="text-lg text-slate-500">Videos</p>
+							<p class="text-3xl font-bold text-slate-700">54684</p>
+						</div>
+					</div>
+					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
+						<div
+							class="w-22 h-22 flex justify-center items-center rounded-full"
+							style="
+								background: #ff0099; /* fallback for old browsers */
+								background: -webkit-linear-gradient(to right, #493240, #ff0099); /* Chrome 10-25, Safari 5.1-6 */
+								background: linear-gradient(to right, #493240, #ff0099); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+							">
+							<i class="ri-music-2-fill text-3xl text-white"></i>
+						</div>
+						<div class="text-center">
+							<p class="text-lg text-slate-500">Audio</p>
+							<p class="text-3xl font-bold text-slate-700">24587</p>
+						</div>
+					</div>
+					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
+						<div
+							class="w-22 h-22 flex justify-center items-center rounded-full"
+							style="
+								background: #1f4037; /* fallback for old browsers */
+								background: -webkit-linear-gradient(to right, #99f2c8, #1f4037); /* Chrome 10-25, Safari 5.1-6 */
+								background: linear-gradient(to right, #99f2c8, #1f4037); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+							">
+							<i class="ri-file-pdf-2-line text-3xl text-white"></i>
+						</div>
+						<div class="text-center">
+							<p class="text-lg text-slate-500">PDFs</p>
+							<p class="text-3xl font-bold text-slate-700">12450</p>
+						</div>
+					</div>
+					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
+						<div
+							class="w-22 h-22 flex justify-center items-center rounded-full"
+							style="
+								background: #f12711; /* fallback for old browsers */
+								background: -webkit-linear-gradient(to right, #f5af19, #f12711); /* Chrome 10-25, Safari 5.1-6 */
+								background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+							">
+							<i class="ri-live-line text-3xl text-white"></i>
+						</div>
+						<div class="text-center">
+							<p class="text-lg text-slate-500">Images</p>
+							<p class="text-3xl font-bold text-slate-700">35670</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Recent/latest files -->
+				<div class="flex items-center gap-5 mt-10">
+					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 max-w-150 flex-1 px-5 py-4">Recent Files</div>
+					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 max-w-150 flex-1 px-5 py-4">Latest Uploads</div>
+				</div>
+			</section>
 		</div>
 	</body>
 </html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Filemoon - Dashboard</title>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+		<script src="../js/layout.js" defer></script>
+	</head>
+	<body class="bg-zinc-100 min-h-screen flex">
+		<!-- Sidebar -->
+		<aside
+			style="left: -26vw"
+			class="fixed top-0 bg-white w-[20vw] h-screen border-r-1 border-zinc-300 shadow-2xl shadow-slate-400/60 flex flex-col items-center px-6 py-8 duration-200"
+			id="sidebar">
+			<!-- User Profile -->
+			<div class="h-fit flex flex-col justify-center items-center">
+				<div class="bg-white border-1 border-zinc-200 w-[6rem] h-[6rem] rounded-full overflow-hidden">
+					<img class="w-full h-full object-cover object-center" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
+				</div>
+				<p class="text-xl mt-2 font-medium text-slate-800">Shubhajit Paul</p>
+				<p class="text-sm text-slate-500 mt-1">shubhajit@gmail.com</p>
+			</div>
+
+			<!-- Menu items -->
+			<div class="mt-10 w-full text-center flex flex-col gap-3">
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./dashboard.html"> <i class="ri-dashboard-line"></i> Dashboard </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./my-files.html"> <i class="ri-file-line"></i> My Files </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./history"> <i class="ri-history-line"></i> History </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-logout-circle-line"></i> Logout </a>
+			</div>
+		</aside>
+
+		<!-- Dashboard -->
+		<div class="w-full min-h-screen bg-slate-100">
+			<!-- Header -->
+			<header class="bg-white h-18 py-3 px-8 flex justify-between items-center">
+				<!-- Logo -->
+				<div class="flex justify-center items-center gap-1">
+					<i class="ri-contrast-2-fill text-3xl pt-1 text-purple-500 leading-none"></i>
+					<h1 class="text-xl font-bold text-slate-700 leading-none">Filemoon</h1>
+				</div>
+				<!-- Menu icon -->
+				<div>
+					<i class="ri-logout-circle-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-rose-400 text-white/90 rounded-md"></i>
+					<i class="ri-menu-2-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-zinc-200/80 rounded-md" id="toggle-sidebar-btn"></i>
+				</div>
+			</header>
+
+			<!-- My files section -->
+			<section class="p-9">
+				<div class="flex justify-between items-center mb-5">
+					<p class="text-lg font-medium text-slate-700">My Files</p>
+					<button class="font-medium bg-purple-500 hover:bg-purple-700 duration-200 text-white px-6 py-2 rounded-md cursor-pointer">
+						<i class="ri-add-line"></i>
+						Add File
+					</button>
+				</div>
+
+				<!-- Files Table -->
+				<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+					<table class="w-full">
+						<!-- Table heading -->
+						<thead>
+							<tr class="bg-slate-800 text-white">
+								<th class="text-left py-4 px-6 font-semibold text-lg">Filename</th>
+								<th class="text-left py-4 px-6 font-semibold text-lg">Type</th>
+								<th class="text-left py-4 px-6 font-semibold text-lg">Size</th>
+								<th class="text-left py-4 px-6 font-semibold text-lg">Created</th>
+								<th class="text-left py-4 px-6 font-semibold text-lg">Action</th>
+							</tr>
+						</thead>
+						<!-- Table body -->
+						<tbody>
+							<tr class="border-b border-zinc-200 hover:bg-zinc-50 transition-colors">
+								<td class="py-4 px-6 text-slate-700">Introduction to html</td>
+								<td class="py-4 px-6 text-slate-600">Image</td>
+								<td class="py-4 px-6 text-slate-600">20.03Mb</td>
+								<td class="py-4 px-6 text-slate-600">24 June 2025</td>
+								<td class="py-4 px-6">
+									<div class="flex gap-2">
+										<button
+											class="bg-red-500 hover:bg-red-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Delete">
+											<i class="ri-delete-bin-line text-lg"></i>
+										</button>
+										<button
+											class="bg-green-500 hover:bg-green-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Download">
+											<i class="ri-download-line text-lg"></i>
+										</button>
+										<button
+											class="bg-yellow-500 hover:bg-yellow-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Share">
+											<i class="ri-share-line text-lg"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+							<tr class="border-b border-zinc-200 hover:bg-zinc-50 transition-colors">
+								<td class="py-4 px-6 text-slate-700">JavaScript Basics.pdf</td>
+								<td class="py-4 px-6 text-slate-600">Document</td>
+								<td class="py-4 px-6 text-slate-600">5.42Mb</td>
+								<td class="py-4 px-6 text-slate-600">18 May 2025</td>
+								<td class="py-4 px-6">
+									<div class="flex gap-2">
+										<button
+											class="bg-red-500 hover:bg-red-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Delete">
+											<i class="ri-delete-bin-line text-lg"></i>
+										</button>
+										<button
+											class="bg-green-500 hover:bg-green-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Download">
+											<i class="ri-download-line text-lg"></i>
+										</button>
+										<button
+											class="bg-yellow-500 hover:bg-yellow-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Share">
+											<i class="ri-share-line text-lg"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+							<tr class="hover:bg-zinc-50 transition-colors">
+								<td class="py-4 px-6 text-slate-700">Project Presentation.pptx</td>
+								<td class="py-4 px-6 text-slate-600">Presentation</td>
+								<td class="py-4 px-6 text-slate-600">12.85Mb</td>
+								<td class="py-4 px-6 text-slate-600">02 January 2025</td>
+								<td class="py-4 px-6">
+									<div class="flex gap-2">
+										<button
+											class="bg-red-500 hover:bg-red-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Delete">
+											<i class="ri-delete-bin-line text-lg"></i>
+										</button>
+										<button
+											class="bg-green-500 hover:bg-green-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Download">
+											<i class="ri-download-line text-lg"></i>
+										</button>
+										<button
+											class="bg-yellow-500 hover:bg-yellow-600 hover:scale-110 hover:shadow-lg text-white w-10 h-10 rounded-md flex items-center justify-center transition-all duration-200 cursor-pointer"
+											title="Share">
+											<i class="ri-share-line text-lg"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+	</body>
+</html>

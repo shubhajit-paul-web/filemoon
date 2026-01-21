@@ -6,13 +6,14 @@
 		<title>Filemoon - Dashboard</title>
 		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 		<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 		<script src="../js/layout.js" defer></script>
 	</head>
 	<body class="bg-zinc-100 min-h-screen flex">
 		<!-- Sidebar -->
 		<aside
 			style="left: -26vw"
-			class="fixed top-0 bg-white w-[20vw] h-screen border-r-1 border-zinc-300 shadow-2xl shadow-slate-400/60 flex flex-col items-center px-6 py-8 duration-200"
+			class="fixed top-0 bg-white w-[20vw] h-screen z-99 border-r-1 border-zinc-300 shadow-2xl shadow-slate-400/60 flex flex-col items-center px-6 py-8 duration-200"
 			id="sidebar">
 			<!-- User Profile -->
 			<div class="h-fit flex flex-col justify-center items-center">
@@ -27,7 +28,7 @@
 			<div class="mt-10 w-full text-center flex flex-col gap-3">
 				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./dashboard.html"> <i class="ri-dashboard-line"></i> Dashboard </a>
 				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./my-files.html"> <i class="ri-file-line"></i> My Files </a>
-				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./history"> <i class="ri-history-line"></i> History </a>
+				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./history.html"> <i class="ri-history-line"></i> History </a>
 				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-logout-circle-line"></i> Logout </a>
 			</div>
 		</aside>
@@ -38,7 +39,7 @@
 			<header class="bg-white h-18 py-3 px-8 flex justify-between items-center">
 				<!-- Logo -->
 				<div class="flex justify-center items-center gap-1">
-					<i class="ri-contrast-2-fill text-3xl pt-1 text-purple-500 leading-none"></i>
+					<i class="ri-contrast-2-fill text-3xl pt-1 text-purple-500 leading-none animate__animated animate__swing"></i>
 					<h1 class="text-xl font-bold text-slate-700 leading-none">Filemoon</h1>
 				</div>
 				<!-- Menu icon -->
@@ -53,7 +54,7 @@
 				<p class="text-lg font-medium text-slate-700 mb-4">Dashboard</p>
 
 				<!-- Metrics -->
-				<div class="flex items-center gap-3">
+				<div class="flex items-center gap-5">
 					<div class="min-w-70 max-w-90 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
 						<div
 							class="w-22 h-22 flex justify-center items-center rounded-full"
@@ -118,8 +119,8 @@
 
 				<!-- Recent/latest files -->
 				<div class="flex items-center gap-5 mt-10">
-					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 max-w-150 flex-1 px-5 py-4">Recent Files</div>
-					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 max-w-150 flex-1 px-5 py-4">Latest Uploads</div>
+					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 flex-1 px-5 py-4">Recent Files</div>
+					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 flex-1 px-5 py-4">Latest Uploads</div>
 				</div>
 			</section>
 		</div>

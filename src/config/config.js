@@ -9,7 +9,9 @@ export default Object.freeze({
 	PORT: process.env.PORT || 8080,
 	MONGODB_URI: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017",
 	JWT: {
-		ACCESS_SECRET: process.env.ACCESS_SECRET,
-		REFRESH_SECRET: process.env.REFRESH_SECRET,
+		ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+		REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+		ACCESS_TOKEN_EXPIRATION: process.env.ACCESS_TOKEN_EXPIRATION || "1h",
+		REFRESH_TOKEN_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION || "60d",
 	},
 });

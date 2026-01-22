@@ -6,7 +6,10 @@ import config from "../config/config.js";
 
 const userSchema = new Schema(
 	{
-		avatar: String,
+		profilePicture: {
+			url: String,
+			fileId: String,
+		},
 		fullName: {
 			type: String,
 			trim: true,
@@ -17,7 +20,7 @@ const userSchema = new Schema(
 			type: String,
 			trim: true,
 			lowercase: true,
-			match: ["/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", "Invalid email"],
+			match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email"],
 			unique: true,
 			index: true,
 			required: true,
@@ -41,25 +44,23 @@ const userSchema = new Schema(
 );
 
 // Hash the password before saving (only if it was modified)
-userSchema.pre("save", async function (next) {
-	if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+	if (!this.isModified("password")) return;
 
 	try {
 		const hashedPassword = await bcrypt.hash(this.password, 10);
 		this.password = hashedPassword;
-
-		next();
 	} catch (error) {
 		logger.error("Error while hashing the password using bcrypt", {
 			event: "bcrypt_hashing_faild",
 			reason: error.message,
 		});
 
-		next(new Error("Error while hashing the password using bcrypt"));
+		throw new Error("Error while hashing the password using bcrypt");
 	}
 });
 
-userSchema.method.isPasswordCorrect = async function (plainTextPassword) {
+userSchema.methods.isPasswordCorrect = async function (plainTextPassword) {
 	try {
 		return await bcrypt.compare(plainTextPassword, this.password);
 	} catch (error) {
@@ -67,15 +68,14 @@ userSchema.method.isPasswordCorrect = async function (plainTextPassword) {
 	}
 };
 
-userSchema.method.generateAccessToken = async function () {
+userSchema.methods.generateAccessToken = async function () {
 	try {
 		return jwt.sign(
 			{
 				id: this._id,
 				email: this.email,
-				phoneNumber: this.phoneNumber,
 			},
-			config.JWT.ACCESS_SECRET,
+			config.JWT.ACCESS_TOKEN_SECRET,
 			{ expiresIn: config.JWT.ACCESS_TOKEN_EXPIRATION },
 		);
 	} catch (error) {
@@ -83,13 +83,12 @@ userSchema.method.generateAccessToken = async function () {
 	}
 };
 
-userSchema.method.generateRefreshToken = async function () {
+userSchema.methods.generateRefreshToken = async function () {
 	try {
 		return jwt.sign(
 			{
 				id: this._id,
 				email: this.email,
-				phoneNumber: this.phoneNumber,
 			},
 			config.JWT.REFRESH_TOKEN_SECRET,
 			{

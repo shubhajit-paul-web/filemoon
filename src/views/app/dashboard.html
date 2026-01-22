@@ -7,122 +7,265 @@
 		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 		<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 		<script src="../js/layout.js" defer></script>
+		<style>
+			body {
+				font-family: "Inter", sans-serif;
+			}
+		</style>
 	</head>
-	<body class="bg-zinc-100 min-h-screen flex">
+	<body class="bg-zinc-50 min-h-screen flex text-zinc-800">
 		<!-- Sidebar -->
 		<aside
-			style="left: -26vw"
-			class="fixed top-0 bg-white w-[20vw] h-screen z-99 border-r-1 border-zinc-300 shadow-2xl shadow-slate-400/60 flex flex-col items-center px-6 py-8 duration-200"
+			style="left: -100%"
+			class="fixed top-0 bg-white w-[260px] h-screen z-50 border-r border-zinc-200 shadow-xl shadow-zinc-200/50 flex flex-col px-6 py-6 transition-all duration-300 ease-in-out"
 			id="sidebar">
-			<!-- User Profile -->
-			<div class="h-fit flex flex-col justify-center items-center">
-				<div class="bg-white border-1 border-zinc-200 w-[6rem] h-[6rem] rounded-full overflow-hidden">
-					<img class="w-full h-full object-cover object-center" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
+			<div class="flex items-center justify-between mb-8 px-2">
+				<div class="flex items-center gap-2">
+					<i class="ri-contrast-2-fill text-3xl text-indigo-600"></i>
+					<h1 class="text-xl font-bold text-zinc-800 tracking-tight">Filemoon</h1>
 				</div>
-				<p class="text-xl mt-2 font-medium text-slate-800">Shubhajit Paul</p>
-				<p class="text-sm text-slate-500 mt-1">shubhajit@gmail.com</p>
+				<button id="close-sidebar-btn" class="p-1 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors cursor-pointer">
+					<i class="ri-close-line text-2xl"></i>
+				</button>
+			</div>
+
+			<!-- User Profile -->
+			<div class="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100 mb-6">
+				<div class="w-10 h-10 min-w-10 rounded-full overflow-hidden border border-zinc-200">
+					<img class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
+				</div>
+				<div class="overflow-hidden">
+					<p class="text-sm font-semibold text-zinc-800 truncate">Shubhajit Paul</p>
+					<p class="text-xs text-zinc-500 truncate">shubhajit@gmail.com</p>
+				</div>
 			</div>
 
 			<!-- Menu items -->
-			<div class="mt-10 w-full text-center flex flex-col gap-3">
-				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./dashboard.html"> <i class="ri-dashboard-line"></i> Dashboard </a>
-				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./my-files.html"> <i class="ri-file-line"></i> My Files </a>
-				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="./history.html"> <i class="ri-history-line"></i> History </a>
-				<a class="bg-purple-500 hover:bg-purple-600 duration-200 text-white font-medium py-2.5 rounded-md" href="#"> <i class="ri-logout-circle-line"></i> Logout </a>
+			<nav class="flex-1 flex flex-col gap-1.5">
+				<a class="flex items-center gap-3 px-3 py-2.5 bg-indigo-50 text-indigo-700 font-medium rounded-lg transition-colors" href="./dashboard.html">
+					<i class="ri-dashboard-line text-lg"></i>
+					<span>Dashboard</span>
+				</a>
+				<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors" href="./my-files.html">
+					<i class="ri-folder-line text-lg"></i>
+					<span>My Files</span>
+				</a>
+				<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors" href="./history.html">
+					<i class="ri-history-line text-lg"></i>
+					<span>History</span>
+				</a>
+			</nav>
+
+			<div class="mt-auto">
+				<a class="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors" href="#">
+					<i class="ri-logout-box-line text-lg"></i>
+					<span>Logout</span>
+				</a>
 			</div>
 		</aside>
 
 		<!-- Dashboard -->
-		<div class="w-full min-h-screen bg-slate-100">
+		<div class="w-full min-h-screen bg-zinc-50 pl-0 lg:pl-0 transition-all duration-300">
 			<!-- Header -->
-			<header class="bg-white h-18 py-3 px-8 flex justify-between items-center">
-				<!-- Logo -->
-				<div class="flex justify-center items-center gap-1">
-					<i class="ri-contrast-2-fill text-3xl pt-1 text-purple-500 leading-none animate__animated animate__swing"></i>
-					<h1 class="text-xl font-bold text-slate-700 leading-none">Filemoon</h1>
+			<header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 h-16 px-6 lg:px-8 flex justify-between items-center border-b border-zinc-200">
+				<!-- Mobile Menu Toggle (Visible on small screens) -->
+				<div class="flex items-center gap-4">
+					<button id="toggle-sidebar-btn" class="p-2 rounded-lg hover:bg-zinc-100 text-zinc-600 focus:outline-none cursor-pointer">
+						<i class="ri-menu-2-line text-xl"></i>
+					</button>
+					<h2 class="text-lg font-semibold text-zinc-800 lg:hidden">Dashboard</h2>
 				</div>
-				<!-- Menu icon -->
-				<div>
-					<i class="ri-logout-circle-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-rose-400 text-white/90 rounded-md"></i>
-					<i class="ri-menu-2-line text-[1.4rem] cursor-pointer px-2.5 py-2 bg-zinc-200/80 rounded-md" id="toggle-sidebar-btn"></i>
+
+				<!-- Actions -->
+				<div class="flex items-center gap-3">
+					<button class="w-8 h-8 flex justify-center items-center rounded-full hover:bg-zinc-100 text-zinc-600 transition-colors relative">
+						<i class="ri-notification-3-line text-lg"></i>
+						<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+					</button>
+					<div class="hidden md:block w-px h-6 bg-zinc-200 mx-1"></div>
+					<button class="flex items-center gap-2 hover:bg-zinc-50 p-1 pr-2 rounded-full transition-colors border border-transparent hover:border-zinc-200">
+						<img class="w-8 h-8 rounded-full border border-zinc-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
+						<i class="ri-arrow-down-s-line text-zinc-400"></i>
+					</button>
 				</div>
 			</header>
 
 			<!-- Dashboard Section -->
-			<section class="p-8">
-				<p class="text-lg font-medium text-slate-700 mb-4">Dashboard</p>
+			<main class="p-6 lg:p-8 max-w-7xl mx-auto">
+				<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+					<div>
+						<h2 class="text-2xl font-bold text-zinc-800 tracking-tight">Dashboard Overview</h2>
+						<p class="text-sm text-zinc-500 mt-1">Welcome back, Shubhajit! Here's what's happening today.</p>
+					</div>
+					<a
+						class="bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2 font-medium rounded-lg shadow-lg shadow-zinc-900/10 flex items-center gap-2 transition-colors cursor-pointer"
+						href="./my-files.html">
+						<i class="ri-upload-cloud-line"></i>
+						<span>Upload File</span>
+					</a>
+				</div>
 
 				<!-- Metrics -->
-				<div class="flex items-center gap-5">
-					<div class="min-w-70 max-w-90 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
-						<div
-							class="w-22 h-22 flex justify-center items-center rounded-full"
-							style="
-								background: #373b44; /* fallback for old browsers */
-								background: -webkit-linear-gradient(to right, #4286f4, #373b44); /* Chrome 10-25, Safari 5.1-6 */
-								background: linear-gradient(to right, #4286f4, #373b44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-							">
-							<i class="ri-live-line text-3xl text-white"></i>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+					<!-- Videos -->
+					<div class="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm hover:shadow-md transition-shadow group">
+						<div class="flex items-start justify-between mb-4">
+							<div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300">
+								<i class="ri-video-line"></i>
+							</div>
+							<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+12%</span>
 						</div>
-						<div class="text-center">
-							<p class="text-lg text-slate-500">Videos</p>
-							<p class="text-3xl font-bold text-slate-700">54684</p>
+						<div>
+							<p class="text-sm font-medium text-zinc-500 mb-1">Total Videos</p>
+							<h3 class="text-2xl font-bold text-zinc-800">54,684</h3>
 						</div>
 					</div>
-					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
-						<div
-							class="w-22 h-22 flex justify-center items-center rounded-full"
-							style="
-								background: #ff0099; /* fallback for old browsers */
-								background: -webkit-linear-gradient(to right, #493240, #ff0099); /* Chrome 10-25, Safari 5.1-6 */
-								background: linear-gradient(to right, #493240, #ff0099); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-							">
-							<i class="ri-music-2-fill text-3xl text-white"></i>
+
+					<!-- Audio -->
+					<div class="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm hover:shadow-md transition-shadow group">
+						<div class="flex items-start justify-between mb-4">
+							<div class="w-12 h-12 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300">
+								<i class="ri-music-2-line"></i>
+							</div>
+							<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+5%</span>
 						</div>
-						<div class="text-center">
-							<p class="text-lg text-slate-500">Audio</p>
-							<p class="text-3xl font-bold text-slate-700">24587</p>
-						</div>
-					</div>
-					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
-						<div
-							class="w-22 h-22 flex justify-center items-center rounded-full"
-							style="
-								background: #1f4037; /* fallback for old browsers */
-								background: -webkit-linear-gradient(to right, #99f2c8, #1f4037); /* Chrome 10-25, Safari 5.1-6 */
-								background: linear-gradient(to right, #99f2c8, #1f4037); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-							">
-							<i class="ri-file-pdf-2-line text-3xl text-white"></i>
-						</div>
-						<div class="text-center">
-							<p class="text-lg text-slate-500">PDFs</p>
-							<p class="text-3xl font-bold text-slate-700">12450</p>
+						<div>
+							<p class="text-sm font-medium text-zinc-500 mb-1">Total Audio</p>
+							<h3 class="text-2xl font-bold text-zinc-800">24,587</h3>
 						</div>
 					</div>
-					<div class="min-w-70 max-w-100 flex-1 px-6 py-7 bg-white rounded-xl border-b-4 border-slate-200 flex items-center gap-6">
-						<div
-							class="w-22 h-22 flex justify-center items-center rounded-full"
-							style="
-								background: #f12711; /* fallback for old browsers */
-								background: -webkit-linear-gradient(to right, #f5af19, #f12711); /* Chrome 10-25, Safari 5.1-6 */
-								background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-							">
-							<i class="ri-live-line text-3xl text-white"></i>
+
+					<!-- PDFs -->
+					<div class="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm hover:shadow-md transition-shadow group">
+						<div class="flex items-start justify-between mb-4">
+							<div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300">
+								<i class="ri-file-text-line"></i>
+							</div>
+							<span class="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">0%</span>
 						</div>
-						<div class="text-center">
-							<p class="text-lg text-slate-500">Images</p>
-							<p class="text-3xl font-bold text-slate-700">35670</p>
+						<div>
+							<p class="text-sm font-medium text-zinc-500 mb-1">Total Documents</p>
+							<h3 class="text-2xl font-bold text-zinc-800">12,450</h3>
+						</div>
+					</div>
+
+					<!-- Images -->
+					<div class="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm hover:shadow-md transition-shadow group">
+						<div class="flex items-start justify-between mb-4">
+							<div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300">
+								<i class="ri-image-line"></i>
+							</div>
+							<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">+18%</span>
+						</div>
+						<div>
+							<p class="text-sm font-medium text-zinc-500 mb-1">Total Images</p>
+							<h3 class="text-2xl font-bold text-zinc-800">35,670</h3>
 						</div>
 					</div>
 				</div>
 
 				<!-- Recent/latest files -->
-				<div class="flex items-center gap-5 mt-10">
-					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 flex-1 px-5 py-4">Recent Files</div>
-					<div class="text-lg font-medium text-slate-600 bg-white border-1 border-slate-200 rounded-lg min-w-100 flex-1 px-5 py-4">Latest Uploads</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+					<!-- Recent Files -->
+					<div class="lg:col-span-2 bg-white rounded-2xl border border-zinc-200/60 shadow-sm overflow-hidden">
+						<div class="px-6 py-4 border-b border-zinc-100 flex justify-between items-center">
+							<h3 class="font-semibold text-zinc-800">Recent Files</h3>
+							<a href="#" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">View All</a>
+						</div>
+						<div class="p-0">
+							<div class="overflow-x-auto">
+								<table class="w-full text-left text-sm text-zinc-600">
+									<thead class="bg-zinc-50 text-xs uppercase text-zinc-500 font-medium">
+										<tr>
+											<th class="px-6 py-3">Name</th>
+											<th class="px-6 py-3">Size</th>
+											<th class="px-6 py-3">Type</th>
+											<th class="px-6 py-3 text-right">Action</th>
+										</tr>
+									</thead>
+									<tbody class="divide-y divide-zinc-100">
+										<tr class="hover:bg-zinc-50/50 transition-colors">
+											<td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3">
+												<i class="ri-file-pdf-line text-xl text-red-500"></i>
+												Project_Report.pdf
+											</td>
+											<td class="px-6 py-4">2.4 MB</td>
+											<td class="px-6 py-4"><span class="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-xs">Document</span></td>
+											<td class="px-6 py-4 text-right">
+												<button class="text-zinc-400 hover:text-zinc-600"><i class="ri-more-2-fill text-lg"></i></button>
+											</td>
+										</tr>
+										<tr class="hover:bg-zinc-50/50 transition-colors">
+											<td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3">
+												<i class="ri-image-line text-xl text-purple-500"></i>
+												Design_Mockup.png
+											</td>
+											<td class="px-6 py-4">5.1 MB</td>
+											<td class="px-6 py-4"><span class="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-xs">Image</span></td>
+											<td class="px-6 py-4 text-right">
+												<button class="text-zinc-400 hover:text-zinc-600"><i class="ri-more-2-fill text-lg"></i></button>
+											</td>
+										</tr>
+										<tr class="hover:bg-zinc-50/50 transition-colors">
+											<td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3">
+												<i class="ri-video-line text-xl text-blue-500"></i>
+												Demo_Video.mp4
+											</td>
+											<td class="px-6 py-4">124 MB</td>
+											<td class="px-6 py-4"><span class="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-xs">Video</span></td>
+											<td class="px-6 py-4 text-right">
+												<button class="text-zinc-400 hover:text-zinc-600"><i class="ri-more-2-fill text-lg"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<!-- Storage Usage -->
+					<div class="bg-white rounded-2xl border border-zinc-200/60 shadow-sm p-6 flex flex-col justify-between">
+						<div>
+							<div class="flex justify-between items-center mb-6">
+								<h3 class="font-semibold text-zinc-800">Storage Usage</h3>
+								<button class="text-zinc-400 hover:text-zinc-600"><i class="ri-more-fill text-xl"></i></button>
+							</div>
+
+							<div class="w-40 h-40 mx-auto rounded-full border-8 border-indigo-100 border-t-indigo-600 flex items-center justify-center mb-6 relative">
+								<div class="text-center">
+									<span class="block text-2xl font-bold text-zinc-800">75%</span>
+									<span class="text-xs text-zinc-500">Used</span>
+								</div>
+							</div>
+
+							<div class="space-y-4">
+								<div class="flex items-center justify-between text-sm">
+									<div class="flex items-center gap-2">
+										<div class="w-2 h-2 rounded-full bg-indigo-600"></div>
+										<span class="text-zinc-600">Used Space</span>
+									</div>
+									<span class="font-semibold text-zinc-800">75 GB</span>
+								</div>
+								<div class="flex items-center justify-between text-sm">
+									<div class="flex items-center gap-2">
+										<div class="w-2 h-2 rounded-full bg-indigo-100"></div>
+										<span class="text-zinc-600">Free Space</span>
+									</div>
+									<span class="font-semibold text-zinc-800">25 GB</span>
+								</div>
+							</div>
+						</div>
+
+						<button class="w-full mt-6 py-2 border border-zinc-200 rounded-lg text-sm font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors">
+							Upgrade Storage
+						</button>
+					</div>
 				</div>
-			</section>
+			</main>
 		</div>
 	</body>
 </html>

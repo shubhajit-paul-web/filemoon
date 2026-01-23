@@ -69,6 +69,13 @@ userSchema.pre("save", async function () {
 	}
 });
 
+userSchema.pre("save", async function () {
+	if (!this.isModified("phoneNumber")) return;
+
+	if (this.phoneNumber?.startsWith("+")) return;
+	this.phoneNumber = "+" + this.phoneNumber;
+});
+
 userSchema.methods.isPasswordCorrect = async function (plainTextPassword) {
 	try {
 		return await bcrypt.compare(plainTextPassword, this.password);

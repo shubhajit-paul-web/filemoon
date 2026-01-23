@@ -43,6 +43,15 @@ const userSchema = new Schema(
 	{ timestamps: true },
 );
 
+userSchema.methods.toJSON = function () {
+	const obj = this.toObject();
+
+	delete obj.password;
+	delete obj.refreshToken;
+
+	return obj;
+};
+
 // Hash the password before saving (only if it was modified)
 userSchema.pre("save", async function () {
 	if (!this.isModified("password")) return;

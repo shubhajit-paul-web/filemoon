@@ -10,12 +10,12 @@ const client = new ImageKit({
 	privateKey: config.IMAGEKIT_PRIVATE_KEY,
 });
 
-const uploadProfilePicture = async ({ file, fileName, folder = "profiles" }) => {
+const uploadProfilePicture = async (file) => {
 	try {
 		const uploadedFile = await client.files.upload({
 			file: await toFile(Buffer.from(file?.buffer), "file"),
-			fileName: fileName || uuid(),
-			folder: "filemoon/" + folder,
+			fileName: uuid(),
+			folder: "filemoon/profiles",
 		});
 
 		return uploadedFile;

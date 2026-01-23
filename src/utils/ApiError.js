@@ -10,7 +10,7 @@ class ApiError extends Error {
 	 * @param {number} [statusCode=500] - HTTP status code.
 	 * @param {string} [message="Something went wrong"] - Error message.
 	 * @param {string} [errorCode="UNKNOWN"] - Custom error identifier.
-	 * @param {boolean} [isOperational=false] - Marks if the error is expected (handled).
+	 * @param {boolean} [isOperational=true] - Marks if the error is expected (handled).
 	 * @param {object|null} [details=null] - Extra error info (e.g. validation details).
 	 * @param {string} [stack] - Optional stack trace.
 	 */
@@ -21,7 +21,8 @@ class ApiError extends Error {
 		this.errorCode = errorCode;
 		this.isOperational = isOperational;
 		this.message = message;
-		this.details = details;
+
+		if (details) this.details = details;
 
 		if (stack) this.stack = stack;
 		else Error.captureStackTrace(this, this.constructor);
@@ -31,12 +32,12 @@ class ApiError extends Error {
 
 		// Log error when it's created
 		if (statusCode >= 500) {
-			logger.error(`${errorCode} | ${message}`, {
+			logger.error(`ApiError: ${errorCode} | ${message}`, {
 				...logPayload,
 				stack: this.stack,
 			});
 		} else {
-			logger.error(`${errorCode} | ${message}`, logPayload);
+			logger.error(`ApiError: ${errorCode} | ${message}`, logPayload);
 		}
 	}
 }

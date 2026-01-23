@@ -7,7 +7,7 @@ import logger from "../loggers/winston.logger.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
 	try {
-		const user = await User.findById(userId);
+		const user = await User.findById(userId).select("email");
 
 		if (!user) {
 			throw new ApiError(StatusCodes.NOT_FOUND, "User not found", errorCodes.USER_NOT_FOUND);
@@ -16,8 +16,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 		const accessToken = await user.generateAccessToken();
 		const refreshToken = await user.generateRefreshToken();
 
-		user.refreshToken = refreshToken;
-		await user.save({ validateBeforeSave: false });
+		await User.findByIdAndUpdate(userId, { refreshToken });
 
 		return { accessToken, refreshToken };
 	} catch (error) {
@@ -48,13 +47,13 @@ const registerUser = async (payload) => {
 			throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid profile picture. Only image files (JPEG, PNG, etc.) are allowed", errorCodes.VALIDATION_ERROR);
 		}
 
-		uploadedProfilePic = await storageService.uploadProfilePicture({ file: profilePicture });
+		uploadedProfilePic = await storageService.uploadProfilePicture(profilePicture);
 	}
 
 	const registeredUser = await User.create({
 		profilePicture: {
 			url: uploadedProfilePic?.url,
-			fileId: uploadedProfilePic.fileId,
+			fileId: uploadedProfilePic?.fileId,
 		},
 		fullName,
 		email,
@@ -62,7 +61,9 @@ const registerUser = async (payload) => {
 		password,
 	});
 
-	return registeredUser;
+	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(registeredUser?._id);
+
+	return { registeredUser, accessToken, refreshToken };
 };
 
 export default { generateAccessAndRefreshToken, registerUser };

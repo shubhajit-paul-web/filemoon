@@ -3,6 +3,9 @@ import bcrypt from "bcrypt";
 import logger from "../loggers/winston.logger.js";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
+import ApiError from "../utils/ApiError.js";
+import { StatusCodes } from "http-status-codes";
+import errorCodes from "../utils/errorCodes.js";
 
 const userSchema = new Schema(
 	{
@@ -80,7 +83,12 @@ userSchema.methods.isPasswordCorrect = async function (plainTextPassword) {
 	try {
 		return await bcrypt.compare(plainTextPassword, this.password);
 	} catch (error) {
-		throw new Error("Incorrect password");
+		logger.error("Bcrypt password compare faild", {
+			event: "bcrypt_compare_faild",
+			reason: error.message,
+		});
+
+		throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to verify password at the moment. Please try again.", errorCodes.INTERNAL_SERVER_ERROR, false, error.message, error.stack);
 	}
 };
 

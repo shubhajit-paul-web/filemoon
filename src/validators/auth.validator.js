@@ -25,4 +25,11 @@ const registerUserValidator = [
 	respondWithValidationErrors,
 ];
 
-export default { registerUserValidator };
+const loginUserValidator = [
+	body("email").trim().notEmpty().withMessage("Email is required").isEmail().withMessage("Invalid email address").toLowerCase(),
+	body("password").trim().notEmpty().withMessage("Password is required"),
+
+	respondWithValidationErrors,
+];
+
+export default { registerUserValidator, loginUserValidator };

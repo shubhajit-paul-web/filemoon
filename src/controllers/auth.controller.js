@@ -16,4 +16,13 @@ const registerUser = asyncHandler(async (req, res) => {
 	return res.status(StatusCodes.CREATED).json(ApiResponse.created("Signup successfully", registeredUser));
 });
 
-export default { registerUser };
+const loginUser = asyncHandler(async (req, res, next) => {
+	const { user, accessToken, refreshToken } = await authService.loginUser(req.body ?? {});
+
+	res.cookie("accessToken", accessToken, setCookieOptions(ACCESS_TOKEN_COOKIE_EXP));
+	res.cookie("refreshToken", refreshToken, setCookieOptions(REFRESH_TOKEN_COOKIE_EXP));
+
+	return res.status(StatusCodes.OK).json(ApiResponse.success("Logged-in successfully", user));
+});
+
+export default { registerUser, loginUser };

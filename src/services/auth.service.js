@@ -66,4 +66,24 @@ const registerUser = async (payload) => {
 	return { registeredUser, accessToken, refreshToken };
 };
 
-export default { generateAccessAndRefreshToken, registerUser };
+const loginUser = async (payload) => {
+	const { email, password } = payload;
+
+	const user = await User.findOne({ email }).select("+password -refreshToken");
+
+	if (!user) {
+		throw new ApiError(StatusCodes.NOT_FOUND, "User not found", errorCodes.USER_NOT_FOUND);
+	}
+
+	const isCorrectPassword = await user.isPasswordCorrect(password?.toString());
+
+	if (!isCorrectPassword) {
+		throw new ApiError(StatusCodes.BAD_REQUEST, "Incorrect password", errorCodes.INCORRECT_PASSWORD);
+	}
+
+	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user?._id);
+
+	return { user, accessToken, refreshToken };
+};
+
+export default { generateAccessAndRefreshToken, registerUser, loginUser };

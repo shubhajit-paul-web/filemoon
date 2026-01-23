@@ -8,120 +8,127 @@ import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 
 const userSchema = new Schema(
-	{
-		profilePicture: {
-			url: String,
-			fileId: String,
-		},
-		fullName: {
-			type: String,
-			trim: true,
-			lowercase: true,
-			required: true,
-		},
-		email: {
-			type: String,
-			trim: true,
-			lowercase: true,
-			match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email"],
-			unique: true,
-			index: true,
-			required: true,
-		},
-		phoneNumber: {
-			type: String,
-			trim: true,
-			minLength: 10,
-			maxLength: 13,
-			required: true,
-		},
-		password: {
-			type: String,
-			trim: true,
-			select: false,
-			required: true,
-		},
-		refreshToken: String,
-	},
-	{ timestamps: true },
+    {
+        profilePicture: {
+            url: String,
+            fileId: String,
+        },
+        fullName: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            required: true,
+        },
+        email: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email"],
+            unique: true,
+            index: true,
+            required: true,
+        },
+        phoneNumber: {
+            type: String,
+            trim: true,
+            minLength: 10,
+            maxLength: 13,
+            required: true,
+        },
+        password: {
+            type: String,
+            trim: true,
+            select: false,
+            required: true,
+        },
+        refreshToken: String,
+    },
+    { timestamps: true }
 );
 
 userSchema.methods.toJSON = function () {
-	const obj = this.toObject();
+    const obj = this.toObject();
 
-	delete obj.password;
-	delete obj.refreshToken;
+    delete obj.password;
+    delete obj.refreshToken;
 
-	return obj;
+    return obj;
 };
 
 // Hash the password before saving (only if it was modified)
 userSchema.pre("save", async function () {
-	if (!this.isModified("password")) return;
+    if (!this.isModified("password")) return;
 
-	try {
-		const hashedPassword = await bcrypt.hash(this.password, 10);
-		this.password = hashedPassword;
-	} catch (error) {
-		logger.error("Error while hashing the password using bcrypt", {
-			event: "bcrypt_hashing_faild",
-			reason: error.message,
-		});
+    try {
+        const hashedPassword = await bcrypt.hash(this.password, 10);
+        this.password = hashedPassword;
+    } catch (error) {
+        logger.error("Error while hashing the password using bcrypt", {
+            event: "bcrypt_hashing_faild",
+            reason: error.message,
+        });
 
-		throw new Error("Error while hashing the password using bcrypt");
-	}
+        throw new Error("Error while hashing the password using bcrypt");
+    }
 });
 
 userSchema.pre("save", async function () {
-	if (!this.isModified("phoneNumber")) return;
+    if (!this.isModified("phoneNumber")) return;
 
-	if (this.phoneNumber?.startsWith("+")) return;
-	this.phoneNumber = "+" + this.phoneNumber;
+    if (this.phoneNumber?.startsWith("+")) return;
+    this.phoneNumber = "+" + this.phoneNumber;
 });
 
 userSchema.methods.isPasswordCorrect = async function (plainTextPassword) {
-	try {
-		return await bcrypt.compare(plainTextPassword, this.password);
-	} catch (error) {
-		logger.error("Bcrypt password compare faild", {
-			event: "bcrypt_compare_faild",
-			reason: error.message,
-		});
+    try {
+        return await bcrypt.compare(plainTextPassword, this.password);
+    } catch (error) {
+        logger.error("Bcrypt password compare faild", {
+            event: "bcrypt_compare_faild",
+            reason: error.message,
+        });
 
-		throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Unable to verify password at the moment. Please try again.", errorCodes.INTERNAL_SERVER_ERROR, false, error.message, error.stack);
-	}
+        throw new ApiError(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "Unable to verify password at the moment. Please try again.",
+            errorCodes.INTERNAL_SERVER_ERROR,
+            false,
+            error.message,
+            error.stack
+        );
+    }
 };
 
 userSchema.methods.generateAccessToken = async function () {
-	try {
-		return jwt.sign(
-			{
-				id: this._id,
-				email: this.email,
-			},
-			config.JWT.ACCESS_TOKEN_SECRET,
-			{ expiresIn: config.JWT.ACCESS_TOKEN_EXPIRATION },
-		);
-	} catch (error) {
-		throw new Error("Error while generating access token");
-	}
+    try {
+        return jwt.sign(
+            {
+                id: this._id,
+                email: this.email,
+            },
+            config.JWT.ACCESS_TOKEN_SECRET,
+            { expiresIn: config.JWT.ACCESS_TOKEN_EXPIRATION }
+        );
+    } catch (error) {
+        throw new Error("Error while generating access token");
+    }
 };
 
 userSchema.methods.generateRefreshToken = async function () {
-	try {
-		return jwt.sign(
-			{
-				id: this._id,
-				email: this.email,
-			},
-			config.JWT.REFRESH_TOKEN_SECRET,
-			{
-				expiresIn: config.JWT.REFRESH_TOKEN_EXPIRATION,
-			},
-		);
-	} catch (error) {
-		throw new Error("Error while generating refresh token");
-	}
+    try {
+        return jwt.sign(
+            {
+                id: this._id,
+                email: this.email,
+            },
+            config.JWT.REFRESH_TOKEN_SECRET,
+            {
+                expiresIn: config.JWT.REFRESH_TOKEN_EXPIRATION,
+            }
+        );
+    } catch (error) {
+        throw new Error("Error while generating refresh token");
+    }
 };
 
 const User = model("User", userSchema);

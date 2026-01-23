@@ -1,377 +1,594 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>My Files - Filemoon</title>
-		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-		<link href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css" rel="stylesheet" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-		<script src="../js/layout.js" defer></script>
-		<script src="../js/my-files.js" defer></script>
-		<style>
-			body {
-				font-family: "Inter", sans-serif;
-			}
-			/* Custom scrollbar for table container */
-			.custom-scrollbar::-webkit-scrollbar {
-				height: 6px;
-				width: 6px;
-			}
-			.custom-scrollbar::-webkit-scrollbar-track {
-				background: #f1f1f1;
-			}
-			.custom-scrollbar::-webkit-scrollbar-thumb {
-				background: #d4d4d8;
-				border-radius: 3px;
-			}
-			.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-				background: #a1a1aa;
-			}
-		</style>
-	</head>
-	<body class="bg-zinc-50 min-h-screen flex text-zinc-800">
-		<!-- Sidebar -->
-		<aside
-			style="left: -100%"
-			class="fixed top-0 bg-white w-[260px] h-screen z-50 border-r border-zinc-200 shadow-xl shadow-zinc-200/50 flex flex-col px-6 py-6 transition-all duration-300 ease-in-out"
-			id="sidebar">
-			<div class="flex items-center justify-between mb-8 px-2">
-				<div class="flex items-center gap-2">
-					<i class="ri-contrast-2-fill text-3xl text-indigo-600"></i>
-					<h1 class="text-xl font-bold text-zinc-800 tracking-tight">Filemoon</h1>
-				</div>
-				<button id="close-sidebar-btn" class="p-1 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors cursor-pointer">
-					<i class="ri-close-line text-2xl"></i>
-				</button>
-			</div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Files - Filemoon</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css"
+            rel="stylesheet"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="../js/layout.js" defer></script>
+        <script src="../js/my-files.js" defer></script>
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+            /* Custom scrollbar for table container */
+            .custom-scrollbar::-webkit-scrollbar {
+                height: 6px;
+                width: 6px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #f1f1f1;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #d4d4d8;
+                border-radius: 3px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #a1a1aa;
+            }
+        </style>
+    </head>
+    <body class="bg-zinc-50 min-h-screen flex text-zinc-800">
+        <!-- Sidebar -->
+        <aside
+            style="left: -100%"
+            class="fixed top-0 bg-white w-[260px] h-screen z-50 border-r border-zinc-200 shadow-xl shadow-zinc-200/50 flex flex-col px-6 py-6 transition-all duration-300 ease-in-out"
+            id="sidebar"
+        >
+            <div class="flex items-center justify-between mb-8 px-2">
+                <div class="flex items-center gap-2">
+                    <i class="ri-contrast-2-fill text-3xl text-indigo-600"></i>
+                    <h1 class="text-xl font-bold text-zinc-800 tracking-tight">Filemoon</h1>
+                </div>
+                <button
+                    id="close-sidebar-btn"
+                    class="p-1 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors cursor-pointer"
+                >
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
 
-			<!-- User Profile -->
-			<div class="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100 mb-6">
-				<div class="w-10 h-10 min-w-10 rounded-full overflow-hidden border border-zinc-200">
-					<img class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
-				</div>
-				<div class="overflow-hidden">
-					<p class="text-sm font-semibold text-zinc-800 truncate">Shubhajit Paul</p>
-					<p class="text-xs text-zinc-500 truncate">shubhajit@gmail.com</p>
-				</div>
-			</div>
+            <!-- User Profile -->
+            <div
+                class="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100 mb-6"
+            >
+                <div class="w-10 h-10 min-w-10 rounded-full overflow-hidden border border-zinc-200">
+                    <img
+                        class="w-full h-full object-cover"
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595"
+                        alt=""
+                    />
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-semibold text-zinc-800 truncate">Shubhajit Paul</p>
+                    <p class="text-xs text-zinc-500 truncate">shubhajit@gmail.com</p>
+                </div>
+            </div>
 
-			<!-- Menu items -->
-			<nav class="flex-1 flex flex-col gap-1.5">
-				<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors" href="./dashboard.html">
-					<i class="ri-dashboard-line text-lg"></i>
-					<span>Dashboard</span>
-				</a>
-				<a class="flex items-center gap-3 px-3 py-2.5 bg-indigo-50 text-indigo-700 font-medium rounded-lg transition-colors" href="./my-files.html">
-					<i class="ri-folder-line text-lg"></i>
-					<span>My Files</span>
-				</a>
-				<a class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors" href="./history.html">
-					<i class="ri-history-line text-lg"></i>
-					<span>History</span>
-				</a>
-			</nav>
+            <!-- Menu items -->
+            <nav class="flex-1 flex flex-col gap-1.5">
+                <a
+                    class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors"
+                    href="./dashboard.html"
+                >
+                    <i class="ri-dashboard-line text-lg"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a
+                    class="flex items-center gap-3 px-3 py-2.5 bg-indigo-50 text-indigo-700 font-medium rounded-lg transition-colors"
+                    href="./my-files.html"
+                >
+                    <i class="ri-folder-line text-lg"></i>
+                    <span>My Files</span>
+                </a>
+                <a
+                    class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors"
+                    href="./history.html"
+                >
+                    <i class="ri-history-line text-lg"></i>
+                    <span>History</span>
+                </a>
+            </nav>
 
-			<div class="mt-auto">
-				<a class="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors" href="#">
-					<i class="ri-logout-box-line text-lg"></i>
-					<span>Logout</span>
-				</a>
-			</div>
-		</aside>
+            <div class="mt-auto">
+                <a
+                    class="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors"
+                    href="#"
+                >
+                    <i class="ri-logout-box-line text-lg"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
 
-		<!-- Dashboard -->
-		<div class="w-full min-h-screen bg-zinc-50 pl-0 lg:pl-0 transition-all duration-300">
-			<!-- Header -->
-			<header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 h-16 px-6 lg:px-8 flex justify-between items-center border-b border-zinc-200">
-				<!-- Mobile Menu Toggle (Visible on small screens) -->
-				<div class="flex items-center gap-4">
-					<button id="toggle-sidebar-btn" class="p-2 rounded-lg hover:bg-zinc-100 text-zinc-600 focus:outline-none cursor-pointer">
-						<i class="ri-menu-2-line text-xl"></i>
-					</button>
-					<h2 class="text-lg font-semibold text-zinc-800 lg:hidden">My Files</h2>
-				</div>
+        <!-- Dashboard -->
+        <div class="w-full min-h-screen bg-zinc-50 pl-0 lg:pl-0 transition-all duration-300">
+            <!-- Header -->
+            <header
+                class="bg-white/80 backdrop-blur-md sticky top-0 z-40 h-16 px-6 lg:px-8 flex justify-between items-center border-b border-zinc-200"
+            >
+                <!-- Mobile Menu Toggle (Visible on small screens) -->
+                <div class="flex items-center gap-4">
+                    <button
+                        id="toggle-sidebar-btn"
+                        class="p-2 rounded-lg hover:bg-zinc-100 text-zinc-600 focus:outline-none cursor-pointer"
+                    >
+                        <i class="ri-menu-2-line text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-semibold text-zinc-800 lg:hidden">My Files</h2>
+                </div>
 
-				<!-- Search Bar -->
-				<div class="hidden md:flex items-center w-96 relative">
-					<i class="ri-search-line absolute left-3 text-zinc-400"></i>
-					<input
-						type="text"
-						placeholder="Search files..."
-						class="w-full pl-10 pr-4 py-2 bg-zinc-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all text-zinc-700 placeholder:text-zinc-400" />
-				</div>
+                <!-- Search Bar -->
+                <div class="hidden md:flex items-center w-96 relative">
+                    <i class="ri-search-line absolute left-3 text-zinc-400"></i>
+                    <input
+                        type="text"
+                        placeholder="Search files..."
+                        class="w-full pl-10 pr-4 py-2 bg-zinc-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all text-zinc-700 placeholder:text-zinc-400"
+                    />
+                </div>
 
-				<!-- Actions -->
-				<div class="flex items-center gap-3">
-					<button class="w-8 h-8 flex justify-center items-center rounded-full hover:bg-zinc-100 text-zinc-600 transition-colors relative">
-						<i class="ri-notification-3-line text-lg"></i>
-						<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-					</button>
-					<div class="hidden md:block w-px h-6 bg-zinc-200 mx-1"></div>
-					<button class="flex items-center gap-2 hover:bg-zinc-50 p-1 pr-2 rounded-full transition-colors border border-transparent hover:border-zinc-200">
-						<img class="w-8 h-8 rounded-full border border-zinc-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595" alt="" />
-						<i class="ri-arrow-down-s-line text-zinc-400"></i>
-					</button>
-				</div>
-			</header>
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <button
+                        class="w-8 h-8 flex justify-center items-center rounded-full hover:bg-zinc-100 text-zinc-600 transition-colors relative"
+                    >
+                        <i class="ri-notification-3-line text-lg"></i>
+                        <span
+                            class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"
+                        ></span>
+                    </button>
+                    <div class="hidden md:block w-px h-6 bg-zinc-200 mx-1"></div>
+                    <button
+                        class="flex items-center gap-2 hover:bg-zinc-50 p-1 pr-2 rounded-full transition-colors border border-transparent hover:border-zinc-200"
+                    >
+                        <img
+                            class="w-8 h-8 rounded-full border border-zinc-200"
+                            src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595"
+                            alt=""
+                        />
+                        <i class="ri-arrow-down-s-line text-zinc-400"></i>
+                    </button>
+                </div>
+            </header>
 
-			<!-- My files section -->
-			<main class="p-6 lg:p-8 max-w-7xl mx-auto">
-				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-					<div>
-						<h2 class="text-2xl font-bold text-zinc-800 tracking-tight">My Files</h2>
-						<p class="text-sm text-zinc-500 mt-1">Manage and organize your documents</p>
-					</div>
-					<div class="flex items-center gap-3">
-						<div class="hidden sm:flex bg-white border border-zinc-200 rounded-lg p-1">
-							<button class="p-1.5 px-3 bg-zinc-100 rounded text-zinc-800 shadow-sm"><i class="ri-list-check"></i></button>
-							<button class="p-1.5 px-3 text-zinc-500 hover:text-zinc-700"><i class="ri-grid-fill"></i></button>
-						</div>
-						<button
-							id="add-file-btn"
-							class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 font-medium rounded-lg shadow-lg shadow-indigo-600/20 flex items-center gap-2 transition-colors cursor-pointer">
-							<i class="ri-add-line text-lg"></i>
-							<span>Add New File</span>
-						</button>
-					</div>
-				</div>
+            <!-- My files section -->
+            <main class="p-6 lg:p-8 max-w-7xl mx-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-zinc-800 tracking-tight">My Files</h2>
+                        <p class="text-sm text-zinc-500 mt-1">Manage and organize your documents</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="hidden sm:flex bg-white border border-zinc-200 rounded-lg p-1">
+                            <button class="p-1.5 px-3 bg-zinc-100 rounded text-zinc-800 shadow-sm">
+                                <i class="ri-list-check"></i>
+                            </button>
+                            <button class="p-1.5 px-3 text-zinc-500 hover:text-zinc-700">
+                                <i class="ri-grid-fill"></i>
+                            </button>
+                        </div>
+                        <button
+                            id="add-file-btn"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 font-medium rounded-lg shadow-lg shadow-indigo-600/20 flex items-center gap-2 transition-colors cursor-pointer"
+                        >
+                            <i class="ri-add-line text-lg"></i>
+                            <span>Add New File</span>
+                        </button>
+                    </div>
+                </div>
 
-				<!-- Filters (Optional - can be expanded) -->
-				<div class="flex flex-wrap items-center gap-2 mb-6">
-					<button class="px-4 py-2 rounded-full bg-zinc-800 text-white text-sm font-medium transition-colors">All Files</button>
-					<button class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors">Documents</button>
-					<button class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors">Images</button>
-					<button class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors">Videos</button>
-					<button class="ml-auto text-zinc-500 hover:text-indigo-600 text-sm font-medium flex items-center gap-1 transition-colors"><i class="ri-filter-3-line"></i> Filter</button>
-				</div>
+                <!-- Filters (Optional - can be expanded) -->
+                <div class="flex flex-wrap items-center gap-2 mb-6">
+                    <button
+                        class="px-4 py-2 rounded-full bg-zinc-800 text-white text-sm font-medium transition-colors"
+                    >
+                        All Files
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors"
+                    >
+                        Documents
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors"
+                    >
+                        Images
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors"
+                    >
+                        Videos
+                    </button>
+                    <button
+                        class="ml-auto text-zinc-500 hover:text-indigo-600 text-sm font-medium flex items-center gap-1 transition-colors"
+                    >
+                        <i class="ri-filter-3-line"></i> Filter
+                    </button>
+                </div>
 
-				<!-- Files Table -->
-				<div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
-					<div class="overflow-x-auto custom-scrollbar">
-						<table class="w-full text-left border-collapse">
-							<thead>
-								<tr class="bg-zinc-50/50 border-b border-zinc-200 text-xs uppercase text-zinc-500 font-semibold tracking-wider">
-									<th class="py-4 px-6">Filename</th>
-									<th class="py-4 px-6">Type</th>
-									<th class="py-4 px-6">Size</th>
-									<th class="py-4 px-6">Created On</th>
-									<th class="py-4 px-6 text-right">Action</th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-zinc-100 text-sm">
-								<tr class="group hover:bg-indigo-50/30 transition-colors">
-									<td class="py-4 px-6">
-										<div class="flex items-center gap-3">
-											<div class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-xl">
-												<i class="ri-image-line"></i>
-											</div>
-											<div>
-												<p class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors">Introduction to html</p>
-												<p class="text-xs text-zinc-400">landscape-bg.png</p>
-											</div>
-										</div>
-									</td>
-									<td class="py-4 px-6">
-										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800"> Image </span>
-									</td>
-									<td class="py-4 px-6 text-zinc-500">20.03 MB</td>
-									<td class="py-4 px-6 text-zinc-500">24 June 2025</td>
-									<td class="py-4 px-6">
-										<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="Rename"><i class="ri-edit-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Download">
-												<i class="ri-download-line"></i>
-											</button>
-											<button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><i class="ri-delete-bin-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="More"><i class="ri-more-2-fill"></i></button>
-										</div>
-									</td>
-								</tr>
-								<tr class="group hover:bg-indigo-50/30 transition-colors">
-									<td class="py-4 px-6">
-										<div class="flex items-center gap-3">
-											<div class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-xl">
-												<i class="ri-file-pdf-line"></i>
-											</div>
-											<div>
-												<p class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors">JavaScript Basics</p>
-												<p class="text-xs text-zinc-400">js-guide-v2.pdf</p>
-											</div>
-										</div>
-									</td>
-									<td class="py-4 px-6">
-										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800"> Document </span>
-									</td>
-									<td class="py-4 px-6 text-zinc-500">5.42 MB</td>
-									<td class="py-4 px-6 text-zinc-500">18 May 2025</td>
-									<td class="py-4 px-6">
-										<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="Rename"><i class="ri-edit-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Download">
-												<i class="ri-download-line"></i>
-											</button>
-											<button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><i class="ri-delete-bin-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="More"><i class="ri-more-2-fill"></i></button>
-										</div>
-									</td>
-								</tr>
-								<!-- Added more sample rows for better visual -->
-								<tr class="group hover:bg-indigo-50/30 transition-colors">
-									<td class="py-4 px-6">
-										<div class="flex items-center gap-3">
-											<div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
-												<i class="ri-video-line"></i>
-											</div>
-											<div>
-												<p class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors">Project Demo Recording</p>
-												<p class="text-xs text-zinc-400">demo_final.mp4</p>
-											</div>
-										</div>
-									</td>
-									<td class="py-4 px-6">
-										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"> Video </span>
-									</td>
-									<td class="py-4 px-6 text-zinc-500">128.5 MB</td>
-									<td class="py-4 px-6 text-zinc-500">15 May 2025</td>
-									<td class="py-4 px-6">
-										<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="Rename"><i class="ri-edit-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Download">
-												<i class="ri-download-line"></i>
-											</button>
-											<button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><i class="ri-delete-bin-line"></i></button>
-											<button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="More"><i class="ri-more-2-fill"></i></button>
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</main>
+                <!-- Files Table -->
+                <div class="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-zinc-50/50 border-b border-zinc-200 text-xs uppercase text-zinc-500 font-semibold tracking-wider"
+                                >
+                                    <th class="py-4 px-6">Filename</th>
+                                    <th class="py-4 px-6">Type</th>
+                                    <th class="py-4 px-6">Size</th>
+                                    <th class="py-4 px-6">Created On</th>
+                                    <th class="py-4 px-6 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-100 text-sm">
+                                <tr class="group hover:bg-indigo-50/30 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center text-xl"
+                                            >
+                                                <i class="ri-image-line"></i>
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors"
+                                                >
+                                                    Introduction to html
+                                                </p>
+                                                <p class="text-xs text-zinc-400">
+                                                    landscape-bg.png
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800"
+                                        >
+                                            Image
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-zinc-500">20.03 MB</td>
+                                    <td class="py-4 px-6 text-zinc-500">24 June 2025</td>
+                                    <td class="py-4 px-6">
+                                        <div
+                                            class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="Rename"
+                                            >
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                title="Download"
+                                            >
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Delete"
+                                            >
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="More"
+                                            >
+                                                <i class="ri-more-2-fill"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="group hover:bg-indigo-50/30 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-xl"
+                                            >
+                                                <i class="ri-file-pdf-line"></i>
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors"
+                                                >
+                                                    JavaScript Basics
+                                                </p>
+                                                <p class="text-xs text-zinc-400">js-guide-v2.pdf</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-100 text-zinc-800"
+                                        >
+                                            Document
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-zinc-500">5.42 MB</td>
+                                    <td class="py-4 px-6 text-zinc-500">18 May 2025</td>
+                                    <td class="py-4 px-6">
+                                        <div
+                                            class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="Rename"
+                                            >
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                title="Download"
+                                            >
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Delete"
+                                            >
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="More"
+                                            >
+                                                <i class="ri-more-2-fill"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Added more sample rows for better visual -->
+                                <tr class="group hover:bg-indigo-50/30 transition-colors">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xl"
+                                            >
+                                                <i class="ri-video-line"></i>
+                                            </div>
+                                            <div>
+                                                <p
+                                                    class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors"
+                                                >
+                                                    Project Demo Recording
+                                                </p>
+                                                <p class="text-xs text-zinc-400">demo_final.mp4</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                                        >
+                                            Video
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-zinc-500">128.5 MB</td>
+                                    <td class="py-4 px-6 text-zinc-500">15 May 2025</td>
+                                    <td class="py-4 px-6">
+                                        <div
+                                            class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="Rename"
+                                            >
+                                                <i class="ri-edit-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                title="Download"
+                                            >
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                title="Delete"
+                                            >
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                            <button
+                                                class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors"
+                                                title="More"
+                                            >
+                                                <i class="ri-more-2-fill"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
 
-			<!-- Drawer - Add new file -->
-			<div id="file-drawer" class="fixed inset-0 z-50 hidden">
-				<!-- Backdrop -->
-				<div class="absolute inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300" id="drawer-backdrop"></div>
+            <!-- Drawer - Add new file -->
+            <div id="file-drawer" class="fixed inset-0 z-50 hidden">
+                <!-- Backdrop -->
+                <div
+                    class="absolute inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300"
+                    id="drawer-backdrop"
+                ></div>
 
-				<!-- Drawer Panel -->
-				<div class="absolute right-0 top-0 h-full w-full md:w-[500px] bg-white shadow-2xl transform transition-transform duration-300 translate-x-full flex flex-col" id="drawer-panel">
-					<!-- Drawer Header -->
-					<div class="bg-indigo-600 px-6 py-5 flex justify-between items-center shrink-0">
-						<div class="flex items-center gap-3">
-							<div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-								<i class="ri-file-add-line text-2xl text-white"></i>
-							</div>
-							<h2 class="text-xl font-semibold text-white tracking-wide">Add New File</h2>
-						</div>
-						<button id="close-drawer-btn" class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg p-2 transition-all duration-200 focus:outline-none">
-							<i class="ri-close-line text-2xl"></i>
-						</button>
-					</div>
+                <!-- Drawer Panel -->
+                <div
+                    class="absolute right-0 top-0 h-full w-full md:w-[500px] bg-white shadow-2xl transform transition-transform duration-300 translate-x-full flex flex-col"
+                    id="drawer-panel"
+                >
+                    <!-- Drawer Header -->
+                    <div class="bg-indigo-600 px-6 py-5 flex justify-between items-center shrink-0">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                                <i class="ri-file-add-line text-2xl text-white"></i>
+                            </div>
+                            <h2 class="text-xl font-semibold text-white tracking-wide">
+                                Add New File
+                            </h2>
+                        </div>
+                        <button
+                            id="close-drawer-btn"
+                            class="text-white/80 hover:text-white hover:bg-white/20 rounded-lg p-2 transition-all duration-200 focus:outline-none"
+                        >
+                            <i class="ri-close-line text-2xl"></i>
+                        </button>
+                    </div>
 
-					<!-- Drawer Content -->
-					<div class="p-8 h-full overflow-y-auto custom-scrollbar">
-						<form id="upload-form" class="space-y-6">
-							<!-- File Name Input -->
-							<div class="space-y-2">
-								<label class="block text-sm font-medium text-zinc-700"> File Name </label>
-								<div class="relative">
-									<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-400">
-										<i class="ri-text"></i>
-									</div>
-									<input
-										type="text"
-										id="filename-input"
-										placeholder="Enter file name (optional)"
-										class="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400" />
-								</div>
-								<p class="text-xs text-zinc-500">Leave empty to use original filename</p>
-							</div>
+                    <!-- Drawer Content -->
+                    <div class="p-8 h-full overflow-y-auto custom-scrollbar">
+                        <form id="upload-form" class="space-y-6">
+                            <!-- File Name Input -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-zinc-700">
+                                    File Name
+                                </label>
+                                <div class="relative">
+                                    <div
+                                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-400"
+                                    >
+                                        <i class="ri-text"></i>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="filename-input"
+                                        placeholder="Enter file name (optional)"
+                                        class="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400"
+                                    />
+                                </div>
+                                <p class="text-xs text-zinc-500">
+                                    Leave empty to use original filename
+                                </p>
+                            </div>
 
-							<!-- File Upload Area -->
-							<div class="space-y-2">
-								<label class="block text-sm font-medium text-zinc-700"> Upload File </label>
+                            <!-- File Upload Area -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-zinc-700">
+                                    Upload File
+                                </label>
 
-								<!-- Custom File Upload -->
-								<div class="relative">
-									<input type="file" id="file-input" class="hidden" />
-									<div
-										id="file-drop-zone"
-										class="border-2 border-dashed border-zinc-300 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50/50 transition-all duration-200 group">
-										<div class="flex flex-col items-center gap-3">
-											<div class="bg-indigo-50 p-4 rounded-full group-hover:bg-indigo-100 transition-colors">
-												<i class="ri-upload-cloud-2-line text-3xl text-indigo-600"></i>
-											</div>
-											<div>
-												<p class="text-zinc-700 font-medium">Click to upload or drag and drop</p>
-												<p class="text-xs text-zinc-500 mt-1">PDF, DOC, JPG, PNG up to 100MB</p>
-											</div>
-										</div>
-									</div>
-								</div>
+                                <!-- Custom File Upload -->
+                                <div class="relative">
+                                    <input type="file" id="file-input" class="hidden" />
+                                    <div
+                                        id="file-drop-zone"
+                                        class="border-2 border-dashed border-zinc-300 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50/50 transition-all duration-200 group"
+                                    >
+                                        <div class="flex flex-col items-center gap-3">
+                                            <div
+                                                class="bg-indigo-50 p-4 rounded-full group-hover:bg-indigo-100 transition-colors"
+                                            >
+                                                <i
+                                                    class="ri-upload-cloud-2-line text-3xl text-indigo-600"
+                                                ></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-zinc-700 font-medium">
+                                                    Click to upload or drag and drop
+                                                </p>
+                                                <p class="text-xs text-zinc-500 mt-1">
+                                                    PDF, DOC, JPG, PNG up to 100MB
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-								<!-- Selected File Display -->
-								<div id="selected-file-display" class="hidden bg-indigo-50/50 border border-indigo-100 rounded-xl p-4">
-									<div class="flex items-center justify-between gap-3">
-										<div class="flex items-center gap-3 flex-1 min-w-0">
-											<div class="bg-white p-2 rounded-lg border border-indigo-100 shadow-sm text-indigo-600">
-												<i class="ri-file-text-line text-xl"></i>
-											</div>
-											<div class="flex-1 min-w-0">
-												<p id="selected-file-name" class="text-zinc-800 text-sm font-medium truncate"></p>
-												<p id="selected-file-size" class="text-xs text-zinc-500"></p>
-											</div>
-										</div>
-										<button type="button" id="remove-file-btn" class="text-zinc-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors">
-											<i class="ri-close-line text-lg"></i>
-										</button>
-									</div>
-								</div>
-							</div>
+                                <!-- Selected File Display -->
+                                <div
+                                    id="selected-file-display"
+                                    class="hidden bg-indigo-50/50 border border-indigo-100 rounded-xl p-4"
+                                >
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                                            <div
+                                                class="bg-white p-2 rounded-lg border border-indigo-100 shadow-sm text-indigo-600"
+                                            >
+                                                <i class="ri-file-text-line text-xl"></i>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p
+                                                    id="selected-file-name"
+                                                    class="text-zinc-800 text-sm font-medium truncate"
+                                                ></p>
+                                                <p
+                                                    id="selected-file-size"
+                                                    class="text-xs text-zinc-500"
+                                                ></p>
+                                            </div>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            id="remove-file-btn"
+                                            class="text-zinc-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors"
+                                        >
+                                            <i class="ri-close-line text-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
 
-							<!-- Description -->
-							<div class="space-y-2">
-								<label class="block text-sm font-medium text-zinc-700"> Description <span class="text-zinc-400 font-normal">(Optional)</span> </label>
-								<textarea
-									placeholder="Add a description for this file..."
-									rows="4"
-									class="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400 resize-none"></textarea>
-							</div>
+                            <!-- Description -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-zinc-700">
+                                    Description
+                                    <span class="text-zinc-400 font-normal">(Optional)</span>
+                                </label>
+                                <textarea
+                                    placeholder="Add a description for this file..."
+                                    rows="4"
+                                    class="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400 resize-none"
+                                ></textarea>
+                            </div>
 
-							<!-- Upload Progress (Hidden by default) -->
-							<div id="upload-progress" class="hidden space-y-2 pt-2">
-								<div class="flex justify-between text-xs font-medium">
-									<span class="text-zinc-600">Uploading...</span>
-									<span class="text-indigo-600" id="progress-percent">0%</span>
-								</div>
-								<div class="w-full bg-zinc-100 rounded-full h-2 overflow-hidden">
-									<div id="progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-300 transform origin-left" style="width: 0%"></div>
-								</div>
-							</div>
+                            <!-- Upload Progress (Hidden by default) -->
+                            <div id="upload-progress" class="hidden space-y-2 pt-2">
+                                <div class="flex justify-between text-xs font-medium">
+                                    <span class="text-zinc-600">Uploading...</span>
+                                    <span class="text-indigo-600" id="progress-percent">0%</span>
+                                </div>
+                                <div class="w-full bg-zinc-100 rounded-full h-2 overflow-hidden">
+                                    <div
+                                        id="progress-bar"
+                                        class="bg-indigo-600 h-full rounded-full transition-all duration-300 transform origin-left"
+                                        style="width: 0%"
+                                    ></div>
+                                </div>
+                            </div>
 
-							<!-- Action Buttons -->
-							<div class="flex gap-3 pt-6 mt-auto">
-								<button
-									type="button"
-									id="cancel-btn"
-									class="px-6 py-2.5 border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500/20">
-									Cancel
-								</button>
-								<button
-									type="submit"
-									class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg shadow-lg shadow-indigo-600/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-									<span>Upload File</span>
-									<i class="ri-arrow-right-line"></i>
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</body>
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3 pt-6 mt-auto">
+                                <button
+                                    type="button"
+                                    id="cancel-btn"
+                                    class="px-6 py-2.5 border border-zinc-300 hover:bg-zinc-50 text-zinc-700 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500/20"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg shadow-lg shadow-indigo-600/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                >
+                                    <span>Upload File</span>
+                                    <i class="ri-arrow-right-line"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

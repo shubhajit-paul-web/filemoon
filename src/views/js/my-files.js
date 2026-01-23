@@ -12,18 +12,18 @@ const removeFileBtn = document.getElementById("remove-file-btn");
 
 // Open drawer
 function openDrawer() {
-	fileDrawer.classList.remove("hidden");
-	setTimeout(() => {
-		drawerPanel.classList.remove("translate-x-full");
-	}, 10);
+    fileDrawer.classList.remove("hidden");
+    setTimeout(() => {
+        drawerPanel.classList.remove("translate-x-full");
+    }, 10);
 }
 
 // Close drawer
 function closeDrawer() {
-	drawerPanel.classList.add("translate-x-full");
-	setTimeout(() => {
-		fileDrawer.classList.add("hidden");
-	}, 300);
+    drawerPanel.classList.add("translate-x-full");
+    setTimeout(() => {
+        fileDrawer.classList.add("hidden");
+    }, 300);
 }
 
 // Event listeners
@@ -36,47 +36,47 @@ drawerBackdrop.addEventListener("click", closeDrawer);
 fileDropZone.addEventListener("click", () => fileInput.click());
 
 fileInput.addEventListener("change", (e) => {
-	const file = e.target.files[0];
-	if (file) {
-		displaySelectedFile(file);
-	}
+    const file = e.target.files[0];
+    if (file) {
+        displaySelectedFile(file);
+    }
 });
 
 // Drag and drop
 fileDropZone.addEventListener("dragover", (e) => {
-	e.preventDefault();
-	fileDropZone.classList.add("border-purple-500", "bg-purple-50");
+    e.preventDefault();
+    fileDropZone.classList.add("border-purple-500", "bg-purple-50");
 });
 
 fileDropZone.addEventListener("dragleave", () => {
-	fileDropZone.classList.remove("border-purple-500", "bg-purple-50");
+    fileDropZone.classList.remove("border-purple-500", "bg-purple-50");
 });
 
 fileDropZone.addEventListener("drop", (e) => {
-	e.preventDefault();
-	fileDropZone.classList.remove("border-purple-500", "bg-purple-50");
-	const file = e.dataTransfer.files[0];
-	if (file) {
-		fileInput.files = e.dataTransfer.files;
-		displaySelectedFile(file);
-	}
+    e.preventDefault();
+    fileDropZone.classList.remove("border-purple-500", "bg-purple-50");
+    const file = e.dataTransfer.files[0];
+    if (file) {
+        fileInput.files = e.dataTransfer.files;
+        displaySelectedFile(file);
+    }
 });
 
 // Display selected file
 function displaySelectedFile(file) {
-	const fileName = file.name;
-	const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
+    const fileName = file.name;
+    const fileSize = (file.size / (1024 * 1024)).toFixed(2) + " MB";
 
-	document.getElementById("selected-file-name").textContent = fileName;
-	document.getElementById("selected-file-size").textContent = fileSize;
+    document.getElementById("selected-file-name").textContent = fileName;
+    document.getElementById("selected-file-size").textContent = fileSize;
 
-	fileDropZone.classList.add("hidden");
-	selectedFileDisplay.classList.remove("hidden");
+    fileDropZone.classList.add("hidden");
+    selectedFileDisplay.classList.remove("hidden");
 }
 
 // Remove file
 removeFileBtn.addEventListener("click", () => {
-	fileInput.value = "";
-	fileDropZone.classList.remove("hidden");
-	selectedFileDisplay.classList.add("hidden");
+    fileInput.value = "";
+    fileDropZone.classList.remove("hidden");
+    selectedFileDisplay.classList.add("hidden");
 });

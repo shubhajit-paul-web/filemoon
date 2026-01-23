@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build / Output
+dist
+build
+coverage
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS / Editor files
+.vscode
+
+# Git
+.git
+.gitignore
+
+# Readme
+*.md

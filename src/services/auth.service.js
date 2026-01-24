@@ -113,4 +113,14 @@ const logoutUser = async (userId) => {
     await User.findByIdAndUpdate(userId, { $unset: { refreshToken: 1 } });
 };
 
-export default { generateAccessAndRefreshToken, registerUser, loginUser, logoutUser };
+const currentUser = async (userId) => {
+    const user = await User.findById(userId).select("-refreshToken").lean();
+
+    if (!user) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "User not found", errorCodes.USER_NOT_FOUND);
+    }
+
+    return user;
+};
+
+export default { generateAccessAndRefreshToken, registerUser, loginUser, logoutUser, currentUser };

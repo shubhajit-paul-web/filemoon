@@ -40,4 +40,12 @@ const logoutUser = asyncHandler(async (req, res) => {
     return res.status(StatusCodes.OK).json(ApiResponse.noContent("Logout successfully"));
 });
 
-export default { registerUser, loginUser, logoutUser };
+const currentUser = asyncHandler(async (req, res) => {
+    const user = await authService.currentUser(req.user?.id);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("Current user profile fetched successfully", user));
+});
+
+export default { registerUser, loginUser, logoutUser, currentUser };

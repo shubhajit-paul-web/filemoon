@@ -20,4 +20,7 @@ router.post("/login", validators.loginUserValidator, authController.loginUser);
 // (Private) POST /api/v1/auth/logout
 router.post("/logout", authUser, authController.logoutUser);
 
+// (Private) GET /api/v1/auth/me
+router.get("/me", authUser, authController.currentUser);
+
 export default router;

@@ -18,9 +18,11 @@ app.use(compression());
 
 // Routes imports
 import authRoutes from "./routes/v1/auth.routes.js";
+import userRoutes from "./routes/v1/user.routes.js";
 
 // Routes declarations
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // Global error handler
 app.use(errorHandler);

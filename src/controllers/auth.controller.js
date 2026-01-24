@@ -22,7 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
         .json(ApiResponse.created("Signup successfully", registeredUser));
 });
 
-const loginUser = asyncHandler(async (req, res, next) => {
+const loginUser = asyncHandler(async (req, res) => {
     const { user, accessToken, refreshToken } = await authService.loginUser(req.body ?? {});
 
     res.cookie("accessToken", accessToken, setCookieOptions(ACCESS_TOKEN_COOKIE_EXP));
@@ -31,4 +31,13 @@ const loginUser = asyncHandler(async (req, res, next) => {
     return res.status(StatusCodes.OK).json(ApiResponse.success("Logged-in successfully", user));
 });
 
-export default { registerUser, loginUser };
+const logoutUser = asyncHandler(async (req, res) => {
+    await authService.logoutUser(req.user?.id);
+
+    res.clearCookie("accessToken", { httpOnly: true });
+    res.clearCookie("refreshToken", { httpOnly: true });
+
+    return res.status(StatusCodes.OK).json(ApiResponse.noContent("Logout successfully"));
+});
+
+export default { registerUser, loginUser, logoutUser };

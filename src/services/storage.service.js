@@ -34,6 +34,30 @@ const uploadProfilePicture = async (file) => {
     }
 };
 
+const uploadFile = async (file) => {
+    try {
+        const uploadedFile = await client.files.upload({
+            file: await toFile(Buffer.from(file?.buffer), "file"),
+            fileName: uuid(),
+            folder: "filemoon/files",
+        });
+
+        return uploadedFile;
+    } catch (error) {
+        logger.error("Faild to upload a file", {
+            event: "imagekit_file_uploading_faild",
+            reason: error.message,
+        });
+
+        throw new ApiError(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "Faild to upload a file",
+            errorCodes.FILE_UPLOADING_FAILD,
+            false
+        );
+    }
+};
+
 const deleteFile = async (fileId) => {
     try {
         return await client.files.delete(fileId);
@@ -52,4 +76,4 @@ const deleteFile = async (fileId) => {
     }
 };
 
-export default { uploadProfilePicture, deleteFile };
+export default { uploadProfilePicture, uploadFile, deleteFile };

@@ -48,4 +48,14 @@ const currentUser = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("Current user profile fetched successfully", user));
 });
 
-export default { registerUser, loginUser, logoutUser, currentUser };
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const accessToken = await authService.refreshAccessToken(req.cookies?.refreshToken);
+
+    res.cookie("accessToken", accessToken, setCookieOptions(ACCESS_TOKEN_COOKIE_EXP));
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.noContent("Access token refreshed successfully"));
+});
+
+export default { registerUser, loginUser, logoutUser, currentUser, refreshAccessToken };

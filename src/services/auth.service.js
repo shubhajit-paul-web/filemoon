@@ -4,6 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 import storageService from "./storage.service.js";
 import logger from "../loggers/winston.logger.js";
+import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
@@ -123,4 +125,56 @@ const currentUser = async (userId) => {
     return user;
 };
 
-export default { generateAccessAndRefreshToken, registerUser, loginUser, logoutUser, currentUser };
+const refreshAccessToken = async (refreshToken) => {
+    if (!refreshToken) {
+        throw new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            "Refresh token not found, please login again",
+            errorCodes.UNAUTHORIZED
+        );
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, config.JWT.REFRESH_TOKEN_SECRET);
+
+        const user = await User.findById(decoded?.id).select("email refreshToken");
+
+        if (!user) {
+            throw new ApiError(StatusCodes.NOT_FOUND, "User not found", errorCodes.USER_NOT_FOUND);
+        }
+
+        if (user?.refreshToken !== refreshToken) {
+            throw new ApiError(
+                StatusCodes.UNAUTHORIZED,
+                "Invalid refresh token, please login again",
+                errorCodes.UNAUTHORIZED
+            );
+        }
+
+        return await user.generateAccessToken();
+    } catch (error) {
+        if (error?.isOperational) {
+            throw new ApiError(error.statusCode, error.message, error.errorCode);
+        }
+
+        logger.error("Error while generating accessToken using refreshToken", {
+            event: "refreshAccessToken_generation_faild",
+            reason: error?.message,
+        });
+
+        throw new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            "Invalid refresh token, please login again",
+            errorCodes.UNAUTHORIZED
+        );
+    }
+};
+
+export default {
+    generateAccessAndRefreshToken,
+    registerUser,
+    loginUser,
+    logoutUser,
+    currentUser,
+    refreshAccessToken,
+};

@@ -23,4 +23,7 @@ router.post("/logout", authUser, authController.logoutUser);
 // (Private) GET /api/v1/auth/me
 router.get("/me", authUser, authController.currentUser);
 
+// (Private) GET /api/v1/auth/refresh-access-token
+router.get("/refresh-access-token", authController.refreshAccessToken);
+
 export default router;

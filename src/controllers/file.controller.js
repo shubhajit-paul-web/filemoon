@@ -14,4 +14,12 @@ const createFile = asyncHandler(async (req, res) => {
         .json(ApiResponse.created("File created successfully", uploadedFile));
 });
 
-export default { createFile };
+const updateFileInfo = asyncHandler(async (req, res) => {
+    const updatedFile = await fileService.updateFileInfo(req.user?.id, req.params?.id, req.body);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("File info updated successfully", updatedFile));
+});
+
+export default { createFile, updateFileInfo };

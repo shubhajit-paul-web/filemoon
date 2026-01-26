@@ -32,6 +32,7 @@ const fileSchema = new Schema(
         },
         file: {
             type: fileInfoSchema,
+            immutable: true,
             required: true,
         },
         type: {

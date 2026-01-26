@@ -11,8 +11,17 @@ router.post(
     "/",
     authUser,
     upload.single("file"),
-    validators.createFileValidator,
+    validators.fileInfoValidator,
     fileController.createFile
+);
+
+// (Private) PATCH /api/v1/files/:id
+router.patch(
+    "/:id",
+    authUser,
+    validators.fileIdValidator,
+    validators.fileInfoValidator,
+    fileController.updateFileInfo
 );
 
 export default router;

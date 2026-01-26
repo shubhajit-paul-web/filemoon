@@ -29,4 +29,41 @@ const createFile = async (userId, payload) => {
     return createdFile;
 };
 
-export default { createFile };
+const updateFileInfo = async (userId, fileId, payload) => {
+    const file = await File.findById(fileId);
+
+    if (!file) {
+        throw new ApiError(
+            StatusCodes.NOT_FOUND,
+            "The file you're trying to update does not exist or has been deleted",
+            errorCodes.NOT_FOUND
+        );
+    }
+
+    const hasAccess = file?.createdBy?.toString() === userId;
+
+    if (!hasAccess) {
+        throw new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            "You don't have permission to modify this file",
+            errorCodes.UNAUTHORIZED
+        );
+    }
+
+    const { fileName, description } = payload ?? {};
+
+    if (!fileName && !description) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "Please provide at least one field to update (fileName or description)",
+            errorCodes.VALIDATION_ERROR
+        );
+    }
+
+    if (fileName) file.fileName = fileName;
+    if (description) file.description = description;
+
+    return await file.save();
+};
+
+export default { createFile, updateFileInfo };

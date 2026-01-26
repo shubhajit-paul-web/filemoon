@@ -1,7 +1,8 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import respondWithValidationErrors from "../middlewares/validator.middleware.js";
+import { isValidObjectId } from "mongoose";
 
-const createFileValidator = [
+const fileInfoValidator = [
     body("fileName")
         .optional()
         .trim()
@@ -16,4 +17,10 @@ const createFileValidator = [
     respondWithValidationErrors,
 ];
 
-export default { createFileValidator };
+const fileIdValidator = [
+    param("id").custom(isValidObjectId).withMessage("Invalid file id"),
+
+    respondWithValidationErrors,
+];
+
+export default { fileInfoValidator, fileIdValidator };

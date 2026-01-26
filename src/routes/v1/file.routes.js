@@ -28,6 +28,6 @@ router.patch(
 router.get("/:id", authUser, validators.fileIdValidator, fileController.fetchFileById);
 
 // (Private) GET /api/v1/files
-router.get("/", authUser, fileController.fetchFiles);
+router.get("/", authUser, validators.paginationValidator, fileController.fetchFiles);
 
 export default router;

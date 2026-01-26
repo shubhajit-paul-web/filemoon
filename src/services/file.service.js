@@ -93,6 +93,7 @@ const fetchFileById = async (userId, fileId) => {
 const fetchFiles = async (userId, params) => {
     let { q, page, limit, sortBy = "createdAt", sortType = "desc" } = params ?? {};
 
+    q = q?.trim();
     page = parseInt(page || 1);
     limit = parseInt(limit || 10);
 

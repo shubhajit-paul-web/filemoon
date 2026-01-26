@@ -46,6 +46,10 @@ const updateFileInfo = async (file, payload) => {
     return await file.save();
 };
 
+const deleteFile = async (file) => {
+    return await File.findByIdAndDelete(file?._id);
+};
+
 const fetchFiles = async (userId, params) => {
     let { q, page, limit, sortBy = "createdAt", sortType = "desc" } = params ?? {};
 
@@ -89,4 +93,4 @@ const fetchFiles = async (userId, params) => {
     return { files, pagination };
 };
 
-export default { createFile, updateFileInfo, fetchFiles };
+export default { createFile, updateFileInfo, deleteFile, fetchFiles };

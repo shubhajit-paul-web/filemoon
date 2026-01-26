@@ -22,6 +22,14 @@ const updateFileInfo = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("File info updated successfully", updatedFile));
 });
 
+const deleteFile = asyncHandler(async (req, res) => {
+    const deletedFile = await fileService.deleteFile(req.file);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("File deleted successfully", deletedFile));
+});
+
 const fetchFileById = asyncHandler(async (req, res) => {
     return res
         .status(StatusCodes.OK)
@@ -36,4 +44,4 @@ const fetchFiles = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("Files fetched successfully", files, pagination));
 });
 
-export default { createFile, updateFileInfo, fetchFileById, fetchFiles };
+export default { createFile, updateFileInfo, deleteFile, fetchFileById, fetchFiles };

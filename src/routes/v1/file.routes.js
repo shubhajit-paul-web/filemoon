@@ -26,6 +26,15 @@ router.patch(
     fileController.updateFileInfo
 );
 
+// (Private) DELETE /api/v1/files/:id
+router.delete(
+    "/:id",
+    authUser,
+    validators.fileIdValidator,
+    checkResourceAccess,
+    fileController.deleteFile
+);
+
 // (Private) GET /api/v1/files/:id
 router.get(
     "/:id",

@@ -10,7 +10,7 @@ const checkResourceAccess = asyncHandler(async (req, res, next) => {
     if (!file) {
         throw new ApiError(
             StatusCodes.NOT_FOUND,
-            "The file you're trying to update does not exist or has been deleted",
+            "The file does not exist or has been deleted",
             errorCodes.NOT_FOUND
         );
     }
@@ -20,7 +20,7 @@ const checkResourceAccess = asyncHandler(async (req, res, next) => {
     if (!hasAccess) {
         throw new ApiError(
             StatusCodes.UNAUTHORIZED,
-            "You don't have permission to modify this file",
+            "You don't have permission to modify or access this file",
             errorCodes.UNAUTHORIZED
         );
     }

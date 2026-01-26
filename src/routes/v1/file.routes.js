@@ -25,6 +25,9 @@ router.patch(
 );
 
 // (Private) GET /api/v1/files/:id
-router.get("/:id", authUser, validators.fileIdValidator, fileController.findFileById);
+router.get("/:id", authUser, validators.fileIdValidator, fileController.fetchFileById);
+
+// (Private) GET /api/v1/files
+router.get("/", authUser, fileController.fetchFiles);
 
 export default router;

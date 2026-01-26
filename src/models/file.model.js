@@ -22,7 +22,6 @@ const fileSchema = new Schema(
             type: String,
             trim: true,
             maxLength: 100,
-            index: true,
             required: true,
         },
         description: {
@@ -52,6 +51,8 @@ const fileSchema = new Schema(
     },
     { timestamps: true }
 );
+
+fileSchema.index({ fileName: "text" });
 
 fileSchema.pre("save", async function () {
     if (!this.isModified("fileName")) return;

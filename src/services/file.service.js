@@ -66,7 +66,7 @@ const updateFileInfo = async (userId, fileId, payload) => {
     return await file.save();
 };
 
-const findFileById = async (userId, fileId) => {
+const fetchFileById = async (userId, fileId) => {
     const file = await File.findById(fileId).lean();
 
     if (!file) {
@@ -90,4 +90,46 @@ const findFileById = async (userId, fileId) => {
     return file;
 };
 
-export default { createFile, updateFileInfo, findFileById };
+const fetchFiles = async (userId, params) => {
+    let { q, page, limit, sortBy = "createdAt", sortType = "desc" } = params ?? {};
+
+    page = parseInt(page || 1);
+    limit = parseInt(limit || 10);
+
+    const skip = (page - 1) * limit;
+
+    const filter = { createdBy: userId };
+
+    if (q) {
+        filter["$text"] = { $search: q };
+    }
+
+    const [totalFiles, files] = await Promise.all([
+        File.countDocuments(filter),
+        File.find(filter)
+            .skip(skip)
+            .limit(limit)
+            .sort({
+                [sortBy]: sortType === "desc" ? -1 : 1,
+            })
+            .lean(),
+    ]);
+
+    const totalPages = Math.ceil(totalFiles / limit);
+
+    const pagination = {
+        page,
+        limit,
+        totalFiles,
+        filesOnPage: files.length,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+        nextPage: page < totalPages ? page + 1 : null,
+        prevPage: page > 1 ? page - 1 : null,
+    };
+
+    return { files, pagination };
+};
+
+export default { createFile, updateFileInfo, fetchFileById, fetchFiles };

@@ -22,10 +22,18 @@ const updateFileInfo = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("File info updated successfully", updatedFile));
 });
 
-const findFileById = asyncHandler(async (req, res) => {
-    const file = await fileService.findFileById(req.user?.id, req.params?.id);
+const fetchFileById = asyncHandler(async (req, res) => {
+    const file = await fileService.fetchFileById(req.user?.id, req.params?.id);
 
     return res.status(StatusCodes.OK).json(ApiResponse.success("File fetched successfully", file));
 });
 
-export default { createFile, updateFileInfo, findFileById };
+const fetchFiles = asyncHandler(async (req, res) => {
+    const { files, pagination } = await fileService.fetchFiles(req.user?.id, req.query);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("Files fetched successfully", files, pagination));
+});
+
+export default { createFile, updateFileInfo, fetchFileById, fetchFiles };

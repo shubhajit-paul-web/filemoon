@@ -47,4 +47,13 @@ router.get(
 // (Private) GET /api/v1/files
 router.get("/", authUser, validators.paginationValidator, fileController.fetchFiles);
 
+// (Private) GET /api/v1/files/:id/download
+router.get(
+    "/:id/download",
+    authUser,
+    validators.fileIdValidator,
+    checkResourceAccess,
+    fileController.downloadFile
+);
+
 export default router;

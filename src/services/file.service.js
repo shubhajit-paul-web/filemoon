@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 import storageService from "./storage.service.js";
 import removeFileExtension from "../utils/removeFileExtension.js";
+import axios from "axios";
 
 const createFile = async (userId, payload) => {
     const { file, fileName, description } = payload;
@@ -47,7 +48,13 @@ const updateFileInfo = async (file, payload) => {
 };
 
 const deleteFile = async (file) => {
-    return await File.findByIdAndDelete(file?._id);
+    const deletedFile = await File.findByIdAndDelete(file?._id);
+
+    if (deleteFile) {
+        storageService.deleteFile(deletedFile?.file?.fileId);
+    }
+
+    return deletedFile;
 };
 
 const fetchFiles = async (userId, params) => {
@@ -93,4 +100,16 @@ const fetchFiles = async (userId, params) => {
     return { files, pagination };
 };
 
-export default { createFile, updateFileInfo, deleteFile, fetchFiles };
+const downloadFile = async (fileObj) => {
+    const { file, fileName, type: contentType } = fileObj;
+
+    // extracting the file extension
+    const extension = contentType?.split("/")?.[1] || "bin";
+
+    // Sending request to ImageKit server and stream the response
+    const response = await axios.get(file?.url, { responseType: "stream" });
+
+    return { response, extension, fileName, contentType };
+};
+
+export default { createFile, updateFileInfo, deleteFile, fetchFiles, downloadFile };

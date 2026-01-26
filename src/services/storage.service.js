@@ -60,19 +60,12 @@ const uploadFile = async (file) => {
 
 const deleteFile = async (fileId) => {
     try {
-        return await client.files.delete(fileId);
+        return await client.files.delete(fileId, { maxRetries: 5 });
     } catch (error) {
         logger.error("Faild to delete a file", {
             event: "imagekit_file_deleting_faild",
             reason: error.message,
         });
-
-        throw new ApiError(
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            "Faild to delete a file",
-            errorCodes.FILE_DELETING_FAILD,
-            false
-        );
     }
 };
 

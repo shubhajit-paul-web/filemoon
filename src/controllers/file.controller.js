@@ -44,4 +44,13 @@ const fetchFiles = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("Files fetched successfully", files, pagination));
 });
 
-export default { createFile, updateFileInfo, deleteFile, fetchFileById, fetchFiles };
+const downloadFile = asyncHandler(async (req, res) => {
+    const { response, extension, fileName, contentType } = await fileService.downloadFile(req.file);
+
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}.${extension}"`);
+
+    response.data.pipe(res);
+});
+
+export default { createFile, updateFileInfo, deleteFile, fetchFileById, fetchFiles, downloadFile };

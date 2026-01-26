@@ -15,7 +15,7 @@ const createFile = asyncHandler(async (req, res) => {
 });
 
 const updateFileInfo = asyncHandler(async (req, res) => {
-    const updatedFile = await fileService.updateFileInfo(req.user?.id, req.params?.id, req.body);
+    const updatedFile = await fileService.updateFileInfo(req.file, req.body);
 
     return res
         .status(StatusCodes.OK)
@@ -23,9 +23,9 @@ const updateFileInfo = asyncHandler(async (req, res) => {
 });
 
 const fetchFileById = asyncHandler(async (req, res) => {
-    const file = await fileService.fetchFileById(req.user?.id, req.params?.id);
-
-    return res.status(StatusCodes.OK).json(ApiResponse.success("File fetched successfully", file));
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("File fetched successfully", req.file));
 });
 
 const fetchFiles = asyncHandler(async (req, res) => {

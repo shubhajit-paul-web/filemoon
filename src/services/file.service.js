@@ -29,27 +29,7 @@ const createFile = async (userId, payload) => {
     return createdFile;
 };
 
-const updateFileInfo = async (userId, fileId, payload) => {
-    const file = await File.findById(fileId);
-
-    if (!file) {
-        throw new ApiError(
-            StatusCodes.NOT_FOUND,
-            "The file you're trying to update does not exist or has been deleted",
-            errorCodes.NOT_FOUND
-        );
-    }
-
-    const hasAccess = file?.createdBy?.toString() === userId;
-
-    if (!hasAccess) {
-        throw new ApiError(
-            StatusCodes.UNAUTHORIZED,
-            "You don't have permission to modify this file",
-            errorCodes.UNAUTHORIZED
-        );
-    }
-
+const updateFileInfo = async (file, payload) => {
     const { fileName, description } = payload ?? {};
 
     if (!fileName && !description) {
@@ -64,30 +44,6 @@ const updateFileInfo = async (userId, fileId, payload) => {
     if (description) file.description = description;
 
     return await file.save();
-};
-
-const fetchFileById = async (userId, fileId) => {
-    const file = await File.findById(fileId).lean();
-
-    if (!file) {
-        throw new ApiError(
-            StatusCodes.NOT_FOUND,
-            "The file you're trying to update does not exist or has been deleted",
-            errorCodes.NOT_FOUND
-        );
-    }
-
-    const hasAccess = file?.createdBy?.toString() === userId;
-
-    if (!hasAccess) {
-        throw new ApiError(
-            StatusCodes.UNAUTHORIZED,
-            "You don't have permission to modify this file",
-            errorCodes.UNAUTHORIZED
-        );
-    }
-
-    return file;
 };
 
 const fetchFiles = async (userId, params) => {
@@ -133,4 +89,4 @@ const fetchFiles = async (userId, params) => {
     return { files, pagination };
 };
 
-export default { createFile, updateFileInfo, fetchFileById, fetchFiles };
+export default { createFile, updateFileInfo, fetchFiles };

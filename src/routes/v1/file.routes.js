@@ -3,6 +3,7 @@ import authUser from "../../middlewares/auth.middleware.js";
 import upload from "../../middlewares/upload.middleware.js";
 import validators from "../../validators/file.validator.js";
 import fileController from "../../controllers/file.controller.js";
+import checkResourceAccess from "../../middlewares/checkResourceAccess.middleware.js";
 
 const router = Router();
 
@@ -21,11 +22,18 @@ router.patch(
     authUser,
     validators.fileIdValidator,
     validators.fileInfoValidator,
+    checkResourceAccess,
     fileController.updateFileInfo
 );
 
 // (Private) GET /api/v1/files/:id
-router.get("/:id", authUser, validators.fileIdValidator, fileController.fetchFileById);
+router.get(
+    "/:id",
+    authUser,
+    validators.fileIdValidator,
+    checkResourceAccess,
+    fileController.fetchFileById
+);
 
 // (Private) GET /api/v1/files
 router.get("/", authUser, validators.paginationValidator, fileController.fetchFiles);

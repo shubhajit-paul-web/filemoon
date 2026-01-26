@@ -66,4 +66,28 @@ const updateFileInfo = async (userId, fileId, payload) => {
     return await file.save();
 };
 
-export default { createFile, updateFileInfo };
+const findFileById = async (userId, fileId) => {
+    const file = await File.findById(fileId).lean();
+
+    if (!file) {
+        throw new ApiError(
+            StatusCodes.NOT_FOUND,
+            "The file you're trying to update does not exist or has been deleted",
+            errorCodes.NOT_FOUND
+        );
+    }
+
+    const hasAccess = file?.createdBy?.toString() === userId;
+
+    if (!hasAccess) {
+        throw new ApiError(
+            StatusCodes.UNAUTHORIZED,
+            "You don't have permission to modify this file",
+            errorCodes.UNAUTHORIZED
+        );
+    }
+
+    return file;
+};
+
+export default { createFile, updateFileInfo, findFileById };

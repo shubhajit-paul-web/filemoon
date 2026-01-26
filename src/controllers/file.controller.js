@@ -22,4 +22,10 @@ const updateFileInfo = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("File info updated successfully", updatedFile));
 });
 
-export default { createFile, updateFileInfo };
+const findFileById = asyncHandler(async (req, res) => {
+    const file = await fileService.findFileById(req.user?.id, req.params?.id);
+
+    return res.status(StatusCodes.OK).json(ApiResponse.success("File fetched successfully", file));
+});
+
+export default { createFile, updateFileInfo, findFileById };

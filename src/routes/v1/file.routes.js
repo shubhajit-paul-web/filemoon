@@ -24,4 +24,7 @@ router.patch(
     fileController.updateFileInfo
 );
 
+// (Private) GET /api/v1/files/:id
+router.get("/:id", authUser, validators.fileIdValidator, fileController.findFileById);
+
 export default router;

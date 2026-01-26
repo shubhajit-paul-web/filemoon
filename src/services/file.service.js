@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 import storageService from "./storage.service.js";
+import removeFileExtension from "../utils/removeFileExtension.js";
 
 const createFile = async (userId, payload) => {
     const { file, fileName, description } = payload;
@@ -14,7 +15,7 @@ const createFile = async (userId, payload) => {
     const uploadedFile = await storageService.uploadFile(file);
 
     const createdFile = await File.create({
-        fileName: fileName || file?.originalname,
+        fileName: fileName || removeFileExtension(file?.originalname),
         description,
         file: {
             url: uploadedFile?.url,

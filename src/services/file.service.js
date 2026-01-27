@@ -13,6 +13,12 @@ const createFile = async (userId, payload) => {
         throw new ApiError(StatusCodes.NOT_FOUND, "File is required", errorCodes.VALIDATION_ERROR);
     }
 
+    let fileCategory = file.mimetype?.split("/")?.[0] ?? "bin";
+
+    if (["application", "text"].includes(fileCategory)) {
+        fileCategory = "document";
+    }
+
     const uploadedFile = await storageService.uploadFile(file);
 
     const createdFile = await File.create({
@@ -24,6 +30,7 @@ const createFile = async (userId, payload) => {
         },
         type: file?.mimetype,
         size: uploadedFile?.size,
+        category: fileCategory,
         createdBy: userId,
     });
 

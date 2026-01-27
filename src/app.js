@@ -20,11 +20,13 @@ app.use(compression());
 import authRoutes from "./routes/v1/auth.routes.js";
 import userRoutes from "./routes/v1/user.routes.js";
 import fileRoutes from "./routes/v1/file.routes.js";
+import dashboardRoutes from "./routes/v1/dashboard.routes.js";
 
 // Routes declarations
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/files", fileRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Global error handler
 app.use(errorHandler);

@@ -7,7 +7,6 @@ const fileInfoSchema = new Schema(
             type: String,
             required: true,
         },
-        thumbnailUrl: String,
         fileId: {
             type: String,
             required: true,
@@ -37,15 +36,24 @@ const fileSchema = new Schema(
         type: {
             type: String,
             lowercase: true,
+            immutable: true,
             required: true,
         },
         size: {
             type: Number,
+            immutable: true,
+            required: true,
+        },
+        category: {
+            type: String,
+            lowercase: true,
+            immutable: true,
             required: true,
         },
         createdBy: {
             type: Schema.Types.ObjectId,
             ref: "User",
+            immutable: true,
             required: true,
         },
     },

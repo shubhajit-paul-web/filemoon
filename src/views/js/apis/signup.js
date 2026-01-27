@@ -24,7 +24,7 @@ function initializeSignupForm() {
             const response = await api.post("/auth/register", formData);
 
             if (response.status === 201) {
-                window.location.href = `${ORIGIN}/app/dashboard.html`;
+                location.replace(`${ORIGIN}/app/dashboard.html`);
             }
         } catch (error) {
             const res = error.response?.data;

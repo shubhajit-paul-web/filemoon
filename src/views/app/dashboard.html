@@ -4,6 +4,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Filemoon - Dashboard</title>
+        <!-- Axios CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <!-- Index JS file -->
+        <script src="../js/apis/index.js" type="module"></script>
+        <!-- Notyf CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link
             href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css"
@@ -52,14 +59,17 @@
             >
                 <div class="w-10 h-10 min-w-10 rounded-full overflow-hidden border border-zinc-200">
                     <img
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-cover object-center"
                         src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595"
                         alt=""
+                        id="user-profile-img"
                     />
                 </div>
                 <div class="overflow-hidden">
-                    <p class="text-sm font-semibold text-zinc-800 truncate">Shubhajit Paul</p>
-                    <p class="text-xs text-zinc-500 truncate">shubhajit@gmail.com</p>
+                    <p class="text-sm font-semibold text-zinc-800 truncate" id="user-fullname">
+                        Your fullName
+                    </p>
+                    <p class="text-xs text-zinc-500 truncate" id="user-email">Your email</p>
                 </div>
             </div>
 
@@ -131,9 +141,10 @@
                         class="flex items-center gap-2 hover:bg-zinc-50 p-1 pr-2 rounded-full transition-colors border border-transparent hover:border-zinc-200"
                     >
                         <img
-                            class="w-8 h-8 rounded-full border border-zinc-200"
+                            class="w-8 h-8 rounded-full border border-zinc-200 object-cover object-center"
                             src="https://api.dicebear.com/7.x/avataaars/svg?seed=male-595"
                             alt=""
+                            id="user-avatar-header"
                         />
                         <i class="ri-arrow-down-s-line text-zinc-400"></i>
                     </button>

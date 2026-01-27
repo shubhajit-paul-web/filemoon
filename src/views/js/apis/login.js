@@ -35,7 +35,9 @@ function initializeLoginForm() {
 }
 
 api.get("/auth/me")
-    .then(() => {
-        window.location.href = `${ORIGIN}/app/dashboard.html`;
+    .then((res) => {
+        if (res.status === 200) {
+            window.location.href = `${ORIGIN}/app/dashboard.html`;
+        }
     })
     .catch(() => initializeLoginForm());

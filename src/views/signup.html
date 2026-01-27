@@ -40,7 +40,18 @@
                     transform: translate(0px, 0px) scale(1);
                 }
             }
+            .signup-form-submit-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
         </style>
+        <!-- Notyf CDN -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" defer></script>
+        <!-- Axios CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+        <!-- Signup JS -->
+        <script src="./js/apis/signup.js" type="module" defer></script>
     </head>
     <body class="bg-zinc-50 min-h-screen flex justify-center items-center relative overflow-hidden">
         <!-- Background decoration -->
@@ -73,11 +84,14 @@
                 <h1 class="text-2xl font-bold text-zinc-800 tracking-tight">Create Account</h1>
                 <p class="text-zinc-500 text-sm mt-1">Join Filemoon to manage your files</p>
             </div>
-            <form class="space-y-4">
+            <!-- Signup form -->
+            <form class="space-y-4" id="signup-form">
                 <div>
-                    <label class="block text-sm font-medium text-zinc-700 mb-1.5" for="avatar"
-                        >Profile Picture</label
-                    >
+                    <label
+                        class="block text-sm font-medium text-zinc-700 mb-1.5"
+                        for="profilePicture"
+                        >Profile Picture (Optional)
+                    </label>
                     <div class="relative group">
                         <div
                             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-400 group-focus-within:text-indigo-600 transition-colors"
@@ -87,8 +101,8 @@
                         <input
                             class="w-full border border-zinc-200 bg-zinc-50/50 pl-10 pr-3 py-2 rounded-xl text-sm text-zinc-700 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200 cursor-pointer"
                             type="file"
-                            name="avatar"
-                            id="avatar"
+                            name="profilePicture"
+                            id="profilePicture"
                             accept="image/*"
                         />
                     </div>
@@ -106,7 +120,7 @@
                         <input
                             class="w-full border border-zinc-200 bg-zinc-50/50 pl-10 pr-3 py-2.5 rounded-xl text-sm text-zinc-700 placeholder:text-zinc-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
                             type="text"
-                            name="fullname"
+                            name="fullName"
                             id="fullname"
                             placeholder="John Doe"
                             required
@@ -147,7 +161,7 @@
                             <input
                                 class="w-full border border-zinc-200 bg-zinc-50/50 pl-10 pr-3 py-2.5 rounded-xl text-sm text-zinc-700 placeholder:text-zinc-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
                                 type="tel"
-                                name="phone"
+                                name="phoneNumber"
                                 id="phone"
                                 placeholder="+910123456789"
                                 required
@@ -192,7 +206,7 @@
                     >
                 </div>
                 <button
-                    class="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-2.5 rounded-xl shadow-lg shadow-zinc-900/10 hover:shadow-zinc-900/20 active:scale-[0.98] transition-all duration-200 mt-2 cursor-pointer flex justify-center items-center gap-2 group"
+                    class="signup-form-submit-btn w-full bg-zinc-900 hover:bg-zinc-800 text-white font-medium py-2.5 rounded-xl shadow-lg shadow-zinc-900/10 hover:shadow-zinc-900/20 active:scale-[0.98] transition-all duration-200 mt-2 cursor-pointer flex justify-center items-center gap-2 group"
                     type="submit"
                 >
                     <span>Create Account</span>

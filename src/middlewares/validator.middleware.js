@@ -8,7 +8,8 @@ const respondWithValidationErrors = async (req, res, next) => {
     if (errors.isEmpty()) return next();
 
     const formattedErrors = errors.array().map((field) => ({
-        [field.path]: field.msg,
+        path: field.path,
+        msg: field.msg,
     }));
 
     return res.status(StatusCodes.BAD_REQUEST).json({

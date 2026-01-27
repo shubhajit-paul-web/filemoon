@@ -75,8 +75,8 @@ userSchema.pre("save", async function () {
 userSchema.pre("save", async function () {
     if (!this.isModified("phoneNumber")) return;
 
-    if (this.phoneNumber?.startsWith("+")) return;
-    this.phoneNumber = "+" + this.phoneNumber;
+    if (this.phoneNumber?.startsWith("+91")) return;
+    this.phoneNumber = "+91" + this.phoneNumber;
 });
 
 userSchema.methods.isPasswordCorrect = async function (plainTextPassword) {

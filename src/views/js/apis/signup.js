@@ -1,5 +1,6 @@
 import api from "./axios.js";
 import { ORIGIN } from "../config.js";
+import fetchUserProfile from "../apis/fetchUserProfile.js";
 
 function initializeSignupForm() {
     var notyf = new Notyf();
@@ -56,11 +57,4 @@ function initializeSignupForm() {
     });
 }
 
-// check is user logged-in, if yes then redirect to dashboard, if not then let user signup
-api.get("/auth/me")
-    .then((res) => {
-        if (res.status === 200) {
-            window.location.href = `${ORIGIN}/app/dashboard.html`;
-        }
-    })
-    .catch(() => initializeSignupForm());
+fetchUserProfile(initializeSignupForm);

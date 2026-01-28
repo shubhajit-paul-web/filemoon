@@ -2,6 +2,19 @@ import api from "./axios.js";
 import { ORIGIN } from "../config.js";
 import { userNameFormatter } from "../utils.js";
 
+async function refreshAccessToken() {
+    try {
+        const response = await api.get("/auth/refresh-access-token");
+
+        if (response.status === 200) {
+            await fetchUserProfile();
+            location.reload();
+        }
+    } catch {
+        location.replace(ORIGIN);
+    }
+}
+
 async function fetchUserProfile() {
     const defaultProfilePic = "https://api.dicebear.com/7.x/avataaars/svg?seed=male-595";
 
@@ -28,11 +41,11 @@ async function fetchUserProfile() {
     } catch (error) {
         const res = error.response?.data;
 
-        if (res?.statusCode) {
-            location.replace(ORIGIN);
+        if (res?.errorCode === "ACCESS_TOKEN_NOT_FOUND") {
+            await refreshAccessToken();
         }
 
-        console.error(error);
+        console.error(res);
     }
 }
 

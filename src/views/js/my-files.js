@@ -19,7 +19,7 @@ function openDrawer() {
 }
 
 // Close drawer
-function closeDrawer() {
+export function closeDrawer() {
     drawerPanel.classList.add("translate-x-full");
     setTimeout(() => {
         fileDrawer.classList.add("hidden");

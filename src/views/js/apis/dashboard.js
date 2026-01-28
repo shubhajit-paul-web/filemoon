@@ -80,11 +80,6 @@ async function fetchRecentUploadedFiles() {
                             ${file?.category[0]?.toUpperCase() + file?.category?.slice(1)}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-zinc-400 hover:text-zinc-600">
-                            <i class="ri-more-2-fill text-lg"></i>
-                        </button>
-                    </td>
                 </tr>
             `;
         });

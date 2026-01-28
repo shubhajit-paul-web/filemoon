@@ -284,7 +284,7 @@
 
                     <!-- Drawer Content -->
                     <div class="p-8 h-full overflow-y-auto custom-scrollbar">
-                        <form id="upload-form" class="space-y-6">
+                        <form id="file-upload-form" class="space-y-6">
                             <!-- File Name Input -->
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-zinc-700">
@@ -299,6 +299,7 @@
                                     <input
                                         type="text"
                                         id="filename-input"
+                                        name="fileName"
                                         placeholder="Enter file name (optional)"
                                         class="w-full pl-10 pr-4 py-2.5 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400"
                                     />
@@ -316,7 +317,7 @@
 
                                 <!-- Custom File Upload -->
                                 <div class="relative">
-                                    <input type="file" id="file-input" class="hidden" />
+                                    <input type="file" id="file-input" class="hidden" name="file" />
                                     <div
                                         id="file-drop-zone"
                                         class="border-2 border-dashed border-zinc-300 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50/50 transition-all duration-200 group"
@@ -382,6 +383,7 @@
                                     <span class="text-zinc-400 font-normal">(Optional)</span>
                                 </label>
                                 <textarea
+                                    name="description"
                                     placeholder="Add a description for this file..."
                                     rows="4"
                                     class="w-full px-4 py-3 bg-zinc-50 border border-zinc-300 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm text-zinc-900 placeholder:text-zinc-400 resize-none"

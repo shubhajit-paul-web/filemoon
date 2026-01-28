@@ -1,6 +1,7 @@
 import api from "./axios.js";
 import formatFileSize from "../formatFileSize.js";
 import { ORIGIN } from "../config.js";
+import { closeDrawer } from "../my-files.js";
 
 const notyf = new Notyf();
 
@@ -35,9 +36,31 @@ function deleteFile() {
     });
 }
 
-const myFilesTable = document.getElementById("my-files-table");
+function uploadFile() {
+    const uploadFileForm = document.getElementById("file-upload-form");
+
+    uploadFileForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(uploadFileForm);
+
+        try {
+            const res = await api.post("/files", formData);
+
+            if (res.status === 201) {
+                fetchFiles();
+                closeDrawer();
+
+                notyf.success("File uploaded successfully");
+            }
+        } catch (error) {
+            notyf.error(error?.response?.data?.message);
+        }
+    });
+}
 
 export async function fetchFiles(category) {
+    const myFilesTable = document.getElementById("my-files-table");
+
     try {
         const response = await api.get(category ? `/files?category=${category}` : "/files");
 
@@ -118,6 +141,7 @@ export async function fetchFiles(category) {
 }
 
 fetchFiles();
+uploadFile();
 
 // Filter files by category buttons
 const categoryAllFilesBtn = document.getElementById("category-all-files-btn");

@@ -80,3 +80,108 @@ removeFileBtn.addEventListener("click", () => {
     fileDropZone.classList.remove("hidden");
     selectedFileDisplay.classList.add("hidden");
 });
+
+// Edit File Modal Elements
+const editFileModal = document.getElementById("edit-file-modal");
+const editModalPanel = document.getElementById("edit-modal-panel");
+const editModalBackdrop = document.getElementById("edit-modal-backdrop");
+const closeEditModalBtn = document.getElementById("close-edit-modal-btn");
+const cancelEditBtn = document.getElementById("cancel-edit-btn");
+const editFileForm = document.getElementById("edit-file-form");
+const editFileId = document.getElementById("edit-file-id");
+const editFilenameInput = document.getElementById("edit-filename-input");
+const editDescriptionInput = document.getElementById("edit-description-input");
+
+// Open edit modal
+function openEditModal(fileId, fileName, description) {
+    editFileId.value = fileId;
+    editFilenameInput.value = fileName;
+    editDescriptionInput.value = description || "";
+
+    editFileModal.classList.remove("hidden");
+    setTimeout(() => {
+        editModalPanel.classList.remove("scale-95", "opacity-0");
+        editModalPanel.classList.add("scale-100", "opacity-100");
+    }, 10);
+}
+
+// Close edit modal
+function closeEditModal() {
+    editModalPanel.classList.remove("scale-100", "opacity-100");
+    editModalPanel.classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+        editFileModal.classList.add("hidden");
+        // Reset form
+        editFileForm.reset();
+    }, 300);
+}
+
+// Event listeners for edit modal
+closeEditModalBtn.addEventListener("click", closeEditModal);
+cancelEditBtn.addEventListener("click", closeEditModal);
+editModalBackdrop.addEventListener("click", closeEditModal);
+
+// Close modal on Escape key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !editFileModal.classList.contains("hidden")) {
+        closeEditModal();
+    }
+});
+
+// Handle edit button clicks (using event delegation for dynamically added elements)
+document.getElementById("my-files-table").addEventListener("click", (e) => {
+    const editBtn = e.target.closest(".edit-file-btn");
+    if (editBtn) {
+        const fileId = editBtn.dataset.fileId;
+        const fileName = editBtn.dataset.fileName;
+        const description = editBtn.dataset.fileDescription;
+        openEditModal(fileId, fileName, description);
+    }
+});
+
+// Handle edit form submission
+import api from "./apis/axios.js";
+import { fetchFiles } from "./apis/my-files.js";
+
+const notyf = new Notyf({
+    position: {
+        y: "top",
+        x: "center",
+    },
+});
+
+editFileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fileId = editFileId.value;
+    const fileName = editFilenameInput.value;
+    const description = editDescriptionInput.value;
+
+    try {
+        const res = await api.patch(`/files/${fileId}`, {
+            fileName,
+            description,
+        });
+
+        if (res.status === 200) {
+            notyf.success("File updated successfully");
+
+            fetchFiles();
+            closeEditModal();
+        }
+    } catch (error) {
+        notyf.error(error?.response?.data?.message);
+    }
+});
+
+const filesFilterBtns = document.querySelectorAll(".files-filter-btn");
+
+filesFilterBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+        filesFilterBtns.forEach((button) => button.removeAttribute("style"));
+
+        const activeBtn = e.target;
+
+        activeBtn.style.backgroundColor = "#333";
+        activeBtn.style.color = "#fff";
+    });
+});

@@ -4,9 +4,9 @@ import { ORIGIN } from "../config.js";
 
 const myFilesTable = document.getElementById("my-files-table");
 
-async function fetchFiles() {
+export async function fetchFiles(category) {
     try {
-        const response = await api.get(`/files`);
+        const response = await api.get(category ? `/files?category=${category}` : "/files");
 
         if (response.status !== 200) return;
 
@@ -53,7 +53,13 @@ async function fetchFiles() {
                     <td class="py-4 px-6 text-zinc-500">${moment(file?.createdAt).format("MMMM Do YYYY, h:mm a")}</td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="Rename">
+                            <button 
+                                class="edit-file-btn p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer" 
+                                title="Edit"
+                                data-file-id="${file?._id}"
+                                data-file-name="${file?.fileName}"
+                                data-file-description="${file?.description || ""}"
+                            >
                                 <i class="ri-edit-line"></i>
                             </button>
                             <a href="${ORIGIN}/api/v1/files/${file?._id}/download" class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer" title="Download">
@@ -79,3 +85,15 @@ async function fetchFiles() {
 }
 
 fetchFiles();
+
+// Filter files by category buttons
+const categoryAllFilesBtn = document.getElementById("category-all-files-btn");
+const categoryVideoFilesBtn = document.getElementById("category-video-files-btn");
+const categoryDocumentFilesBtn = document.getElementById("category-document-files-btn");
+const categoryImageFilesBtn = document.getElementById("category-image-files-btn");
+
+// Fetch files by category
+categoryAllFilesBtn.addEventListener("click", () => fetchFiles());
+categoryVideoFilesBtn.addEventListener("click", () => fetchFiles("video"));
+categoryDocumentFilesBtn.addEventListener("click", () => fetchFiles("document"));
+categoryImageFilesBtn.addEventListener("click", () => fetchFiles("image"));

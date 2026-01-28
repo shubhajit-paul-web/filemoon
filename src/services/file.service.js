@@ -65,7 +65,7 @@ const deleteFile = async (file) => {
 };
 
 const fetchFiles = async (userId, params) => {
-    let { q, page, limit, sortBy = "createdAt", sortType = "desc" } = params ?? {};
+    let { q, category, page, limit, sortBy = "createdAt", sortType = "desc" } = params ?? {};
 
     q = q?.trim();
     page = parseInt(page || 1);
@@ -75,8 +75,9 @@ const fetchFiles = async (userId, params) => {
 
     const filter = { createdBy: userId };
 
-    if (q) {
-        filter["$text"] = { $search: q };
+    if (q) filter["$text"] = { $search: q };
+    if (category) {
+        filter.category = category.toLowerCase();
     }
 
     const [totalFiles, files] = await Promise.all([

@@ -2,6 +2,39 @@ import api from "./axios.js";
 import formatFileSize from "../formatFileSize.js";
 import { ORIGIN } from "../config.js";
 
+const notyf = new Notyf();
+
+function deleteFile() {
+    const deleteFileBtns = document.querySelectorAll(".delete-file-btn");
+
+    deleteFileBtns.forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+            const fileId = e.target.dataset?.fileId;
+            const fileName = e.target.dataset?.fileName;
+
+            if (fileId) {
+                const ans = confirm(`Do you want to delete ${fileName} file?`);
+
+                if (ans) {
+                    try {
+                        const res = await api.delete(`/files/${fileId}`);
+
+                        if (res.status === 200) {
+                            notyf.success(`${fileName} deleted successfully`);
+
+                            const deletedFileRow = document.getElementById(`file-${fileId}`);
+
+                            deletedFileRow?.remove();
+                        }
+                    } catch (error) {
+                        notyf.error(error.response?.data?.message);
+                    }
+                }
+            }
+        });
+    });
+}
+
 const myFilesTable = document.getElementById("my-files-table");
 
 export async function fetchFiles(category) {
@@ -12,8 +45,6 @@ export async function fetchFiles(category) {
 
         const files = response.data?.data;
         let myFilesTableHTML = "";
-
-        console.log(files);
 
         const categoryColorsMap = {
             image: "bg-orange-100 text-orange-800",
@@ -31,7 +62,7 @@ export async function fetchFiles(category) {
 
         files?.forEach((file) => {
             myFilesTableHTML += `
-                <tr class="group hover:bg-indigo-50/30 transition-colors">
+                <tr class="group hover:bg-indigo-50/30 transition-colors" id="file-${file?._id}">
                     <td class="py-4 px-6">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg ${categoryColorsMap[file?.category]} flex items-center justify-center text-xl">
@@ -63,10 +94,10 @@ export async function fetchFiles(category) {
                                 <i class="ri-edit-line"></i>
                             </button>
                             <a href="${ORIGIN}/api/v1/files/${file?._id}/download" class="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer" title="Download">
-                                <i class="ri-download-line"></i>
+                                <i class="ri-download-line pointer-events-none"></i>
                             </a>
-                            <button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-                                <i class="ri-delete-bin-line"></i>
+                            <button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors delete-file-btn" title="Delete" data-file-id="${file?._id}" data-file-name="${file?.fileName}">
+                                <i class="ri-delete-bin-line pointer-events-none"></i>
                             </button>
                             <button class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors" title="More">
                                 <i class="ri-more-2-fill"></i>
@@ -79,6 +110,8 @@ export async function fetchFiles(category) {
         if (myFilesTableHTML) {
             myFilesTable.innerHTML = myFilesTableHTML;
         }
+
+        deleteFile();
     } catch (error) {
         console.error(error);
     }

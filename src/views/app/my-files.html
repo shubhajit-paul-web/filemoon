@@ -8,6 +8,10 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- Index JS file -->
         <script src="../js/apis/index.js" type="module"></script>
+        <!-- Moment JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+        <!-- My-files js -->
+        <script src="../js/apis/my-files.js" type="module" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <link
             href="https://cdn.jsdelivr.net/npm/remixicon@4.8.0/fonts/remixicon.css"
@@ -242,7 +246,7 @@
                                     <th class="py-4 px-6 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-zinc-100 text-sm">
+                            <tbody class="divide-y divide-zinc-100 text-sm" id="my-files-table">
                                 <tr class="group hover:bg-indigo-50/30 transition-colors">
                                     <td class="py-4 px-6">
                                         <div class="flex items-center gap-3">

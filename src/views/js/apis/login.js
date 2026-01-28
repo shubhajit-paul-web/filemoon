@@ -34,10 +34,20 @@ function initializeLoginForm() {
     });
 }
 
-api.get("/auth/me")
-    .then((res) => {
+(async () => {
+    try {
+        const res = await api.get("/auth/me");
+
         if (res.status === 200) {
-            window.location.href = `${ORIGIN}/app/dashboard.html`;
+            location.replace(`${ORIGIN}/app/dashboard.html`);
         }
-    })
-    .catch(() => initializeLoginForm());
+    } catch {
+        try {
+            const res = await api.get("/auth/refresh-access-token");
+
+            if (res.status === 200) return location.reload();
+        } catch {
+            initializeLoginForm();
+        }
+    }
+})();

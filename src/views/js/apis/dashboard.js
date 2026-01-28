@@ -1,4 +1,5 @@
 import api from "./axios.js";
+import formatFileSize from "../formatFileSize.js";
 
 async function loadMetrics() {
     try {
@@ -73,7 +74,7 @@ async function fetchRecentUploadedFiles() {
                         ${returnFileIcon(file?.category)}
                         ${file?.fileName}
                     </td>
-                    <td class="px-6 py-4">${file?.size}</td>
+                    <td class="px-6 py-4">${formatFileSize(file?.size)}</td>
                     <td class="px-6 py-4">
                         <span class="bg-zinc-100 text-zinc-600 px-2 py-1 rounded text-xs">
                             ${file?.category[0]?.toUpperCase() + file?.category?.slice(1)}

@@ -2,6 +2,8 @@ import api from "./axios.js";
 import { ORIGIN } from "../config.js";
 import { userNameFormatter } from "../utils.js";
 
+export let userProfile = {};
+
 async function refreshAccessToken() {
     try {
         const response = await api.get("/auth/refresh-access-token");
@@ -17,13 +19,20 @@ async function refreshAccessToken() {
 
 async function fetchUserProfile() {
     const defaultProfilePic = "https://api.dicebear.com/7.x/avataaars/svg?seed=male-595";
+    const greetingMsgElem = document.getElementById("greeting-msg");
+
+    function showGreetingMsg(fullName) {
+        const firstName = userNameFormatter(fullName?.split(" ")?.[0]);
+
+        greetingMsgElem.textContent = `Welcome back, ${firstName}! Here's what's happening today.`;
+    }
 
     try {
         const res = await api.get("/auth/me");
-
         const data = res.data?.data;
 
         if (!data) return;
+        if (greetingMsgElem) showGreetingMsg(data?.fullName);
 
         // Sidebar
         const profileImgElem = document.querySelector("#user-profile-img");
@@ -45,7 +54,7 @@ async function fetchUserProfile() {
             await refreshAccessToken();
         }
 
-        console.error(res);
+        console.error(error);
     }
 }
 

@@ -204,24 +204,28 @@
                     <button
                         class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors files-filter-btn"
                         id="category-document-files-btn"
+                        data-file-category="document"
                     >
                         Documents
                     </button>
                     <button
                         class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors files-filter-btn"
                         id="category-image-files-btn"
+                        data-file-category="image"
                     >
                         Images
                     </button>
                     <button
                         class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors files-filter-btn"
                         id="category-video-files-btn"
+                        data-file-category="video"
                     >
                         Videos
                     </button>
                     <button
                         class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors files-filter-btn"
                         id="category-audio-files-btn"
+                        data-file-category="audio"
                     >
                         Audio
                     </button>
@@ -317,7 +321,13 @@
 
                                 <!-- Custom File Upload -->
                                 <div class="relative">
-                                    <input type="file" id="file-input" class="hidden" name="file" />
+                                    <input
+                                        type="file"
+                                        id="file-input"
+                                        class="hidden"
+                                        name="file"
+                                        required
+                                    />
                                     <div
                                         id="file-drop-zone"
                                         class="border-2 border-dashed border-zinc-300 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-500 hover:bg-indigo-50/50 transition-all duration-200 group"
@@ -391,7 +401,7 @@
                             </div>
 
                             <!-- Upload Progress (Hidden by default) -->
-                            <div id="upload-progress" class="space-y-2 pt-2">
+                            <div id="upload-progress" class="hidden space-y-2 pt-2">
                                 <div class="flex justify-between text-xs font-medium">
                                     <span class="text-zinc-600">Uploading...</span>
                                     <span class="text-indigo-600" id="progress-percent">0%</span>
@@ -415,6 +425,7 @@
                                     Cancel
                                 </button>
                                 <button
+                                    id="upload-file-btn"
                                     type="submit"
                                     class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg shadow-lg shadow-indigo-600/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
                                 >

@@ -150,6 +150,8 @@ const notyf = new Notyf({
     },
 });
 
+export let currentFileCategory;
+
 editFileForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const fileId = editFileId.value;
@@ -165,7 +167,7 @@ editFileForm.addEventListener("submit", async (e) => {
         if (res.status === 200) {
             notyf.success("File updated successfully");
 
-            fetchFiles();
+            fetchFiles(currentFileCategory);
             closeEditModal();
         }
     } catch (error) {
@@ -180,6 +182,7 @@ filesFilterBtns.forEach((btn) => {
         filesFilterBtns.forEach((button) => button.removeAttribute("style"));
 
         const activeBtn = e.target;
+        currentFileCategory = activeBtn?.dataset?.fileCategory;
 
         activeBtn.style.backgroundColor = "#333";
         activeBtn.style.color = "#fff";

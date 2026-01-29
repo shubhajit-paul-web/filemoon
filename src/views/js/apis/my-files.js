@@ -109,8 +109,8 @@ export async function fetchFiles(category) {
                             <div class="w-10 h-10 rounded-lg ${categoryColorsMap[file?.category]} flex items-center justify-center text-xl">
                                 <i class="${iconsMap[file?.category]}"></i>
                             </div>
-                            <div>
-                                <a href="${file?.file?.url}" target="_blank" class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors">
+                            <div class="max-w-md">
+                                <a href="${file?.file?.url}" title="${file?.fileName}" target="_blank" class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors line-clamp-1">
                                     ${file?.fileName}
                                 </a>
                             </div>

@@ -40,10 +40,10 @@ async function fetchUserProfile() {
         const userEmailElem = document.querySelector("#user-email");
 
         profileImgElem.setAttribute("src", data.profilePicture?.url ?? defaultProfilePic);
-        userFullNameElem.textContent = userNameFormatter(data.fullName);
+        userFullNameElem.textContent = data.fullName;
         userEmailElem.textContent = data.email;
 
-        // Header
+        // Header: User avatar/profile picture
         const userAvatarHeader = document.querySelector("#user-avatar-header");
 
         userAvatarHeader.setAttribute("src", data?.profilePicture?.url ?? defaultProfilePic);

@@ -27,6 +27,7 @@ async function loadMetrics() {
         const documentsPercentageElem = document.getElementById("total-documents-percentage");
         const imagesPercentageElem = document.getElementById("total-images-percentage");
 
+        // Show file metrics in each category
         function showDataToMetricsCard(totalFilesElem, totalFiles, percentageElem, percentage) {
             totalFilesElem.textContent = totalFiles ?? 0;
 
@@ -39,30 +40,49 @@ async function loadMetrics() {
             }
         }
 
-        data?.forEach((file) => {
-            const totalFiles = file?.totalFiles;
-            const percentage = Math.floor((totalFiles / totalFilesCount) * 100);
+        function showMetrics() {
+            data?.forEach((file) => {
+                const totalFiles = file?.totalFiles;
+                const percentage = Math.floor((totalFiles / totalFilesCount) * 100);
 
-            switch (file?._id) {
-                case "video":
-                    showDataToMetricsCard(videosElem, totalFiles, videosPercentageElem, percentage);
-                    break;
-                case "audio":
-                    showDataToMetricsCard(audioElem, totalFiles, audioPercentageElem, percentage);
-                    break;
-                case "document":
-                    showDataToMetricsCard(
-                        documentsElem,
-                        totalFiles,
-                        documentsPercentageElem,
-                        percentage
-                    );
-                    break;
-                case "image":
-                    showDataToMetricsCard(imagesElem, totalFiles, imagesPercentageElem, percentage);
-                    break;
-            }
-        });
+                switch (file?._id) {
+                    case "video":
+                        showDataToMetricsCard(
+                            videosElem,
+                            totalFiles,
+                            videosPercentageElem,
+                            percentage
+                        );
+                        break;
+                    case "audio":
+                        showDataToMetricsCard(
+                            audioElem,
+                            totalFiles,
+                            audioPercentageElem,
+                            percentage
+                        );
+                        break;
+                    case "document":
+                        showDataToMetricsCard(
+                            documentsElem,
+                            totalFiles,
+                            documentsPercentageElem,
+                            percentage
+                        );
+                        break;
+                    case "image":
+                        showDataToMetricsCard(
+                            imagesElem,
+                            totalFiles,
+                            imagesPercentageElem,
+                            percentage
+                        );
+                        break;
+                }
+            });
+        }
+
+        showMetrics();
     } catch (error) {
         console.error(error);
     }
@@ -87,11 +107,13 @@ async function fetchRecentUploadedFiles() {
                     icon = '<i class="ri-video-line text-xl text-blue-500"></i>';
                     break;
                 case "image":
-                    icon = '<i class="ri-image-line text-xl text-purple-500"></i>';
+                    icon = '<i class="ri-image-line text-xl text-orange-700"></i>';
                     break;
                 case "document":
                     icon = '<i class="ri-file-pdf-line text-xl text-red-500"></i>';
                     break;
+                default:
+                    icon = '<i class="ri-folder-music-line text-xl text-purple-500"></i>';
             }
 
             return icon;
@@ -100,9 +122,11 @@ async function fetchRecentUploadedFiles() {
         data?.forEach((file) => {
             recentFilesHTML += `
                 <tr class="hover:bg-zinc-50/50 transition-colors">
-                    <td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3">
-                        ${returnFileIcon(file?.category)}
-                        ${file?.fileName}
+                    <td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3 max-w-md">
+                         <div class="flex items-center gap-3">
+                            ${returnFileIcon(file?.category)}
+                            <span class="line-clamp-1">${file?.fileName}</span>
+                        </div>
                     </td>
                     <td class="px-6 py-4">${formatFileSize(file?.size)}</td>
                     <td class="px-6 py-4">
@@ -120,5 +144,7 @@ async function fetchRecentUploadedFiles() {
     }
 }
 
-loadMetrics();
-fetchRecentUploadedFiles();
+window.onload = function () {
+    loadMetrics();
+    fetchRecentUploadedFiles();
+};

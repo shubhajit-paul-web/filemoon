@@ -58,4 +58,18 @@ async function fetchUserProfile() {
     }
 }
 
+async function logout() {
+    try {
+        const res = await api.post("/auth/logout");
+
+        if (res.status === 200) {
+            location.replace("/");
+        }
+    } catch (error) {
+        console.error(error.response);
+    }
+}
+const logoutBtn = document.getElementById("logout-btn");
+logoutBtn.addEventListener("click", () => logout());
+
 fetchUserProfile();

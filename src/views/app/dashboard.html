@@ -94,13 +94,13 @@
             </nav>
 
             <div class="mt-auto">
-                <a
-                    class="flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors"
-                    href="#"
+                <button
+                    class="w-full flex items-center gap-3 px-3 py-2.5 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors cursor-pointer"
+                    id="logout-btn"
                 >
                     <i class="ri-logout-box-line text-lg"></i>
                     <span>Logout</span>
-                </a>
+                </button>
             </div>
         </aside>
 
@@ -177,8 +177,9 @@
                                 <i class="ri-video-line"></i>
                             </div>
                             <span
-                                class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
-                                >+12%</span
+                                class="text-xs font-medium px-2 py-1 rounded-full total-files-percentage"
+                                id="total-videos-percentage"
+                                >0%</span
                             >
                         </div>
                         <div>
@@ -198,8 +199,9 @@
                                 <i class="ri-music-2-line"></i>
                             </div>
                             <span
-                                class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
-                                >+5%</span
+                                class="text-xs font-medium px-2 py-1 rounded-full total-files-percentage"
+                                id="total-audio-percentage"
+                                >0%</span
                             >
                         </div>
                         <div>
@@ -219,7 +221,8 @@
                                 <i class="ri-file-text-line"></i>
                             </div>
                             <span
-                                class="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full"
+                                class="text-xs font-medium px-2 py-1 rounded-full total-files-percentage"
+                                id="total-documents-percentage"
                                 >0%</span
                             >
                         </div>
@@ -240,8 +243,9 @@
                                 <i class="ri-image-line"></i>
                             </div>
                             <span
-                                class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full"
-                                >+18%</span
+                                class="text-xs font-medium px-2 py-1 rounded-full total-files-percentage"
+                                id="total-images-percentage"
+                                >0%</span
                             >
                         </div>
                         <div>

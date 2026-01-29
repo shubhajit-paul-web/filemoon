@@ -9,27 +9,57 @@ async function loadMetrics() {
 
         const data = response.data.data;
 
+        // Calculate total files count
+        const totalFilesCount = data.reduce(
+            (totalFiles, file) => (totalFiles += file.totalFiles),
+            0
+        );
+
         // File category elements
         const videosElem = document.getElementById("total-videos");
         const audioElem = document.getElementById("total-audio");
         const documentsElem = document.getElementById("total-documents");
         const imagesElem = document.getElementById("total-images");
 
+        // File percentage per category
+        const videosPercentageElem = document.getElementById("total-videos-percentage");
+        const audioPercentageElem = document.getElementById("total-audio-percentage");
+        const documentsPercentageElem = document.getElementById("total-documents-percentage");
+        const imagesPercentageElem = document.getElementById("total-images-percentage");
+
+        function showDataToMetricsCard(totalFilesElem, totalFiles, percentageElem, percentage) {
+            totalFilesElem.textContent = totalFiles ?? 0;
+
+            if (percentage) {
+                percentageElem.textContent = `+${percentage}%`;
+                percentageElem.classList.add("text-green-600", "bg-green-50");
+            } else {
+                percentageElem.textContent = `${percentage}%`;
+                percentageElem.classList.add("text-zinc-500", "bg-zinc-100");
+            }
+        }
+
         data?.forEach((file) => {
             const totalFiles = file?.totalFiles;
+            const percentage = Math.floor((totalFiles / totalFilesCount) * 100);
 
             switch (file?._id) {
                 case "video":
-                    videosElem.textContent = totalFiles;
+                    showDataToMetricsCard(videosElem, totalFiles, videosPercentageElem, percentage);
                     break;
                 case "audio":
-                    audioElem.textContent = totalFiles;
+                    showDataToMetricsCard(audioElem, totalFiles, audioPercentageElem, percentage);
                     break;
                 case "document":
-                    documentsElem.textContent = totalFiles;
+                    showDataToMetricsCard(
+                        documentsElem,
+                        totalFiles,
+                        documentsPercentageElem,
+                        percentage
+                    );
                     break;
                 case "image":
-                    imagesElem.textContent = totalFiles;
+                    showDataToMetricsCard(imagesElem, totalFiles, imagesPercentageElem, percentage);
                     break;
             }
         });

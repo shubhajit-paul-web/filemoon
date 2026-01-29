@@ -19,7 +19,7 @@ function initializeLoginForm() {
             });
 
             if (res.status === 200) {
-                window.location.href = `${ORIGIN}/app/dashboard.html`;
+                window.location.href = `${ORIGIN}/dashboard`;
             }
         } catch (error) {
             const res = error.response.data;

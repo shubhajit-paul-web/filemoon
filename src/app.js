@@ -21,19 +21,23 @@ function getFilePath(fileName) {
 }
 
 // UI Endpoints
+app.get("/", async (req, res) => {
+    return res.sendFile(getFilePath("index.html"));
+});
+
 app.get("/signup", async (req, res) => {
     return res.sendFile(getFilePath("signup.html"));
 });
 
-app.get("/app/dashboard", async (req, res) => {
+app.get("/dashboard", async (req, res) => {
     return res.sendFile(getFilePath("app/dashboard.html"));
 });
 
-app.get("/app/my-files", async (req, res) => {
-    return res.sendFile(getFilePath("app/my-files.html"));
+app.get("/files", async (req, res) => {
+    return res.sendFile(getFilePath("app/files.html"));
 });
 
-app.get("/app/history", async (req, res) => {
+app.get("/history", async (req, res) => {
     return res.sendFile(getFilePath("app/history.html"));
 });
 

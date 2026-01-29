@@ -3,7 +3,9 @@ import formatFileSize from "../formatFileSize.js";
 import { ORIGIN } from "../config.js";
 import { closeDrawer } from "../my-files.js";
 
-const notyf = new Notyf();
+const notyf = new Notyf({
+    position: { x: "center", y: "top" },
+});
 
 function deleteFile() {
     const deleteFileBtns = document.querySelectorAll(".delete-file-btn");
@@ -148,9 +150,11 @@ const categoryAllFilesBtn = document.getElementById("category-all-files-btn");
 const categoryVideoFilesBtn = document.getElementById("category-video-files-btn");
 const categoryDocumentFilesBtn = document.getElementById("category-document-files-btn");
 const categoryImageFilesBtn = document.getElementById("category-image-files-btn");
+const categoryAudioFilesBtn = document.getElementById("category-audio-files-btn");
 
 // Fetch files by category
 categoryAllFilesBtn.addEventListener("click", () => fetchFiles());
 categoryVideoFilesBtn.addEventListener("click", () => fetchFiles("video"));
 categoryDocumentFilesBtn.addEventListener("click", () => fetchFiles("document"));
 categoryImageFilesBtn.addEventListener("click", () => fetchFiles("image"));
+categoryAudioFilesBtn.addEventListener("click", () => fetchFiles("audio"));

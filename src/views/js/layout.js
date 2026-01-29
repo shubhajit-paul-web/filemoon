@@ -1,6 +1,5 @@
 const toggleSidebarBtn = document.querySelector("#toggle-sidebar-btn");
 const sidebar = document.querySelector("#sidebar");
-const closeSidebarBtn = document.querySelector("#close-sidebar-btn");
 
 const closeSidebar = () => {
     sidebar.style.left = "-100%";
@@ -20,22 +19,13 @@ if (toggleSidebarBtn) {
     });
 }
 
-if (closeSidebarBtn) {
-    closeSidebarBtn.addEventListener("click", () => {
-        closeSidebar();
-    });
-}
-
-// Optional: Close sidebar when clicking outside on mobile
+// Optional: Close sidebar when clicking outside
 document.addEventListener("click", (e) => {
-    if (window.innerWidth < 1024) {
-        // Only on mobile/tablet
-        if (
-            sidebar.style.left === "0px" &&
-            !sidebar.contains(e.target) &&
-            !toggleSidebarBtn.contains(e.target)
-        ) {
-            closeSidebar();
-        }
+    if (
+        sidebar.style.left === "0px" &&
+        !sidebar.contains(e.target) &&
+        !toggleSidebarBtn.contains(e.target)
+    ) {
+        closeSidebar();
     }
 });

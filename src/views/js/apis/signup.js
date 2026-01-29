@@ -25,7 +25,7 @@ function initializeSignupForm() {
             const response = await api.post("/auth/register", formData);
 
             if (response.status === 201) {
-                location.replace(`${ORIGIN}/app/dashboard.html`);
+                location.replace(`${ORIGIN}/dashboard`);
             }
         } catch (error) {
             const res = error.response?.data;

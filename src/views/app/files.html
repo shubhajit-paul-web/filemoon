@@ -62,12 +62,6 @@
                     <i class="ri-contrast-2-fill text-3xl text-indigo-600"></i>
                     <h1 class="text-xl font-bold text-zinc-800 tracking-tight">Filemoon</h1>
                 </div>
-                <button
-                    id="close-sidebar-btn"
-                    class="p-1 rounded-md text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors cursor-pointer"
-                >
-                    <i class="ri-close-line text-2xl"></i>
-                </button>
             </div>
 
             <!-- User Profile -->
@@ -96,21 +90,21 @@
             <nav class="flex-1 flex flex-col gap-1.5">
                 <a
                     class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors"
-                    href="./dashboard.html"
+                    href="/dashboard"
                 >
                     <i class="ri-dashboard-line text-lg"></i>
                     <span>Dashboard</span>
                 </a>
                 <a
                     class="flex items-center gap-3 px-3 py-2.5 bg-indigo-50 text-indigo-700 font-medium rounded-lg transition-colors"
-                    href="./my-files.html"
+                    href="/files"
                 >
                     <i class="ri-folder-line text-lg"></i>
                     <span>My Files</span>
                 </a>
                 <a
                     class="flex items-center gap-3 px-3 py-2.5 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 font-medium rounded-lg transition-colors"
-                    href="./history.html"
+                    href="/history"
                 >
                     <i class="ri-history-line text-lg"></i>
                     <span>History</span>
@@ -224,6 +218,12 @@
                         id="category-video-files-btn"
                     >
                         Videos
+                    </button>
+                    <button
+                        class="px-4 py-2 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-800 text-sm font-medium transition-colors files-filter-btn"
+                        id="category-audio-files-btn"
+                    >
+                        Audio
                     </button>
                 </div>
 
@@ -391,7 +391,7 @@
                             </div>
 
                             <!-- Upload Progress (Hidden by default) -->
-                            <div id="upload-progress" class="hidden space-y-2 pt-2">
+                            <div id="upload-progress" class="space-y-2 pt-2">
                                 <div class="flex justify-between text-xs font-medium">
                                     <span class="text-zinc-600">Uploading...</span>
                                     <span class="text-indigo-600" id="progress-percent">0%</span>
@@ -400,7 +400,7 @@
                                     <div
                                         id="progress-bar"
                                         class="bg-indigo-600 h-full rounded-full transition-all duration-300 transform origin-left"
-                                        style="width: 0%"
+                                        style="width: 20%"
                                     ></div>
                                 </div>
                             </div>

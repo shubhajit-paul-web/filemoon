@@ -6,7 +6,7 @@ async function fetchUserProfile(callback) {
         const res = await api.get("/auth/me");
 
         if (res.status === 200) {
-            location.replace(`${ORIGIN}/app/dashboard.html`);
+            location.replace(`${ORIGIN}/dashboard`);
         }
     } catch {
         try {

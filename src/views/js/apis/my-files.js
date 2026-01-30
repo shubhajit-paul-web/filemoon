@@ -24,7 +24,7 @@ function deleteFile() {
                         const res = await api.delete(`/files/${fileId}`);
 
                         if (res.status === 200) {
-                            notyf.success(`${fileName} deleted successfully`);
+                            notyf.success("File deleted successfully!");
 
                             const deletedFileRow = document.getElementById(`file-${fileId}`);
 
@@ -52,19 +52,31 @@ function uploadFile() {
     uploadFileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(uploadFileForm);
+        const file = formData.get("file");
 
+        // Validating file size
+        const MAXIMUM_FILE_SIZE = 100 * 1024 * 1024; // 100mb
+        if (file.size > MAXIMUM_FILE_SIZE) {
+            return notyf.error("File too large. Maximum allowed size is 100MB");
+        }
+
+        // Upload button UI before change
         const uploadFileBtnNormal = uploadFileBtn.innerHTML;
 
+        // Add: Upload file button loading UI
         uploadFileBtn.setAttribute("disabled", true);
-        uploadFileBtn.textContent = "Uploading file...";
         uploadFileBtn.classList.add("opacity-60");
+        uploadFileBtn.innerHTML = `
+            <i class="ri-loader-fill animate-spin"></i>
+            <span>Uploading file...</span>
+        `;
 
         // Show progress bar
         uploadProgress.classList.remove("hidden");
         progressPercent.textContent = "0%";
 
         try {
-            const res = await api.post("/files", formData, {
+            const options = {
                 onUploadProgress: (progressEvent) => {
                     const loaded = progressEvent.loaded;
                     const total = progressEvent.total;
@@ -73,7 +85,9 @@ function uploadFile() {
                     progressPercent.textContent = `${percentage}%`;
                     uploadProgressBar.style.width = `${percentage}%`;
                 },
-            });
+            };
+
+            const res = await api.post("/files", formData, options);
 
             if (res.status === 201) {
                 fetchFiles(currentFileCategory);
@@ -85,6 +99,7 @@ function uploadFile() {
         } catch (error) {
             notyf.error(error?.response?.data?.message);
         } finally {
+            // Remove: Upload file button loading UI
             uploadFileBtn.removeAttribute("disabled");
             uploadFileBtn.innerHTML = uploadFileBtnNormal;
             uploadFileBtn.classList.remove("opacity-60");
@@ -102,6 +117,7 @@ export async function fetchFiles(category, query = "") {
     let endpoint = "/files";
 
     try {
+        // Filters
         if (category) {
             endpoint += `?category=${category}`;
         }
@@ -130,7 +146,17 @@ export async function fetchFiles(category, query = "") {
             audio: "ri-folder-music-line",
         };
 
-        files?.forEach((file) => {
+        if (!files.length) {
+            myFilesTable.innerHTML = `
+                <tr>
+                    <td colspan="5" class="py-5 text-lg text-center text-zinc-600">No files found!</td>
+                </tr>
+            `;
+            return;
+        }
+
+        // Add rows into files table
+        files.forEach((file) => {
             myFilesTableHTML += `
                 <tr class="group hover:bg-indigo-50/30 transition-colors" id="file-${file?._id}">
                     <td class="py-4 px-6">
@@ -146,12 +172,12 @@ export async function fetchFiles(category, query = "") {
                         </div>
                     </td>
                     <td class="py-4 px-6">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColorsMap[file?.category]}">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-default ${categoryColorsMap[file?.category]}">
                             ${file?.category}
                         </span>
                     </td>
                     <td class="py-4 px-6 text-zinc-500">${formatFileSize(file?.size)}</td>
-                    <td class="py-4 px-6 text-zinc-500">${moment(file?.createdAt).format("MMMM Do YYYY, h:mm a")}</td>
+                    <td class="py-4 px-6 text-zinc-500">${moment(file?.createdAt).format("Do MMM YYYY, hh:mm a")}</td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                             <a href="${file?.file?.url}" target="_blank" class="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer" title="View">
@@ -177,18 +203,18 @@ export async function fetchFiles(category, query = "") {
                 </tr>`;
         });
 
-        if (myFilesTableHTML) {
-            myFilesTable.innerHTML = myFilesTableHTML;
-        }
-
+        myFilesTable.innerHTML = myFilesTableHTML;
         deleteFile();
     } catch (error) {
+        notyf.error(error.response ? error.response.data?.message : "Something went wrong!");
         console.error(error);
     }
 }
 
-fetchFiles();
-uploadFile();
+window.onload = () => {
+    fetchFiles();
+    uploadFile();
+};
 
 // Filter files by category buttons
 const categoryAllFilesBtn = document.getElementById("category-all-files-btn");
@@ -208,9 +234,9 @@ categoryAudioFilesBtn.addEventListener("click", () => fetchFiles("audio"));
 import { debounce } from "../utils.js";
 const searchBar = document.getElementById("files-search-bar");
 
-const searchFiles = debounce(fetchFiles, 500);
+const searchFiles = debounce(fetchFiles, 400);
 
-searchBar.addEventListener("keyup", async (e) => {
+searchBar.addEventListener("keyup", (e) => {
     const query = e.target.value?.trim();
 
     if (!query) {

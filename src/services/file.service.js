@@ -8,9 +8,18 @@ import axios from "axios";
 
 const createFile = async (userId, payload) => {
     const { file, fileName, description } = payload;
+    const MAXIMUM_FILE_SIZE = 100 * 1024 * 1024; // 100mb
 
     if (!file?.buffer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "File is required", errorCodes.VALIDATION_ERROR);
+    }
+
+    if (file.size > MAXIMUM_FILE_SIZE) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "File too large. Maximum allowed size is 100MB",
+            errorCodes.FILE_SIZE_LIMIT_EXCEED
+        );
     }
 
     let fileCategory = file.mimetype?.split("/")?.[0] ?? "bin";

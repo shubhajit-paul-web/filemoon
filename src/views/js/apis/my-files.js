@@ -45,6 +45,9 @@ import { currentFileCategory } from "../my-files.js";
 function uploadFile() {
     const uploadFileForm = document.getElementById("file-upload-form");
     const uploadFileBtn = document.getElementById("upload-file-btn");
+    const progressPercent = document.getElementById("progress-percent");
+    const uploadProgress = document.getElementById("upload-progress");
+    const uploadProgressBar = document.getElementById("progress-bar");
 
     uploadFileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -56,12 +59,26 @@ function uploadFile() {
         uploadFileBtn.textContent = "Uploading file...";
         uploadFileBtn.classList.add("opacity-60");
 
+        // Show progress bar
+        uploadProgress.classList.remove("hidden");
+        progressPercent.textContent = "0%";
+
         try {
-            const res = await api.post("/files", formData);
+            const res = await api.post("/files", formData, {
+                onUploadProgress: (progressEvent) => {
+                    const loaded = progressEvent.loaded;
+                    const total = progressEvent.total;
+                    const percentage = Math.floor((loaded / total) * 100);
+
+                    progressPercent.textContent = `${percentage}%`;
+                    uploadProgressBar.style.width = `${percentage}%`;
+                },
+            });
 
             if (res.status === 201) {
                 fetchFiles(currentFileCategory);
                 closeDrawer();
+                uploadFileForm.reset();
 
                 notyf.success("File uploaded successfully");
             }
@@ -71,6 +88,10 @@ function uploadFile() {
             uploadFileBtn.removeAttribute("disabled");
             uploadFileBtn.innerHTML = uploadFileBtnNormal;
             uploadFileBtn.classList.remove("opacity-60");
+
+            // Hide progress
+            uploadProgress.classList.add("hidden");
+            uploadProgressBar.style.width = "0px";
         }
     });
 }

@@ -76,11 +76,19 @@ function uploadFile() {
 }
 
 // Fetch files based on category
-export async function fetchFiles(category) {
+export async function fetchFiles(category, query = "") {
     const myFilesTable = document.getElementById("my-files-table");
+    let endpoint = "/files";
 
     try {
-        const response = await api.get(category ? `/files?category=${category}` : "/files");
+        if (category) {
+            endpoint += `?category=${category}`;
+        }
+        if (query) {
+            endpoint += category ? `&q=${query}` : `?q=${query}`;
+        }
+
+        const response = await api.get(endpoint);
 
         if (response.status !== 200) return;
 
@@ -174,3 +182,19 @@ categoryVideoFilesBtn.addEventListener("click", () => fetchFiles("video"));
 categoryDocumentFilesBtn.addEventListener("click", () => fetchFiles("document"));
 categoryImageFilesBtn.addEventListener("click", () => fetchFiles("image"));
 categoryAudioFilesBtn.addEventListener("click", () => fetchFiles("audio"));
+
+// Search file
+import { debounce } from "../utils.js";
+const searchBar = document.getElementById("files-search-bar");
+
+const searchFiles = debounce(fetchFiles, 500);
+
+searchBar.addEventListener("keyup", async (e) => {
+    const query = e.target.value?.trim();
+
+    if (!query) {
+        return searchFiles(currentFileCategory);
+    }
+
+    searchFiles(currentFileCategory, query);
+});

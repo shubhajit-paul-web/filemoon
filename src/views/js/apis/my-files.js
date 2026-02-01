@@ -3,13 +3,13 @@ import formatFileSize from "../formatFileSize.js";
 import { ORIGIN } from "../config.js";
 import { closeDrawer } from "../my-files.js";
 import { currentFileCategory } from "../my-files.js";
+import { debounce } from "../utils.js";
 
 const notyf = new Notyf({
     position: { x: "center", y: "top" },
 });
 
-// Delete file
-function deleteFile() {
+async function deleteFile() {
     const deleteFileBtns = document.querySelectorAll(".delete-file-btn");
 
     deleteFileBtns.forEach((btn) => {
@@ -46,8 +46,7 @@ function deleteFile() {
     });
 }
 
-// Upload file
-function uploadFile() {
+async function uploadFile() {
     const uploadFileForm = document.getElementById("file-upload-form");
     const uploadFileBtn = document.getElementById("upload-file-btn");
     const progressPercent = document.getElementById("progress-percent");
@@ -116,40 +115,39 @@ function uploadFile() {
     });
 }
 
-// Fetch files based on category
+// Fetch files based on category or query
 export async function fetchFiles(category, query = "") {
     const myFilesTable = document.getElementById("my-files-table");
     let endpoint = "/files";
 
-    try {
-        // Filters
-        if (category) {
-            endpoint += `?category=${category}`;
-        }
-        if (query) {
-            endpoint += category ? `&q=${query}` : `?q=${query}`;
-        }
+    const categoryColorsMap = {
+        image: "bg-orange-100 text-orange-800",
+        video: "bg-blue-100 text-blue-600",
+        document: "bg-pink-100 text-pink-600",
+        audio: "bg-purple-100 text-purple-600",
+    };
+    const iconsMap = {
+        image: "ri-image-line",
+        video: "ri-video-line",
+        document: "ri-file-pdf-line",
+        audio: "ri-folder-music-line",
+    };
 
+    // filters by category or query if provided
+    if (category) {
+        endpoint += `?category=${category}`;
+    }
+    if (query) {
+        endpoint += category ? `&q=${query}` : `?q=${query}`;
+    }
+
+    try {
         const response = await api.get(endpoint);
 
         if (response.status !== 200) return;
 
         const files = response.data?.data;
         let myFilesTableHTML = "";
-
-        const categoryColorsMap = {
-            image: "bg-orange-100 text-orange-800",
-            video: "bg-blue-100 text-blue-600",
-            document: "bg-pink-100 text-pink-600",
-            audio: "bg-purple-100 text-purple-600",
-        };
-
-        const iconsMap = {
-            image: "ri-image-line",
-            video: "ri-video-line",
-            document: "ri-file-pdf-line",
-            audio: "ri-folder-music-line",
-        };
 
         if (!files.length) {
             myFilesTable.innerHTML = `
@@ -169,7 +167,7 @@ export async function fetchFiles(category, query = "") {
                             <div class="w-10 h-10 rounded-lg ${categoryColorsMap[file?.category]} flex items-center justify-center text-xl">
                                 <i class="${iconsMap[file?.category]}"></i>
                             </div>
-                            <div class="max-w-md">
+                            <div class="max-w-xs">
                                 <a href="${file?.file?.url}" title="${file?.fileName}" target="_blank" class="font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors line-clamp-1">
                                     ${file?.fileName}
                                 </a>
@@ -203,6 +201,9 @@ export async function fetchFiles(category, query = "") {
                             <button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer delete-file-btn" title="Delete" data-file-id="${file?._id}" data-file-name="${file?.fileName}">
                                 <i class="ri-delete-bin-line pointer-events-none"></i>
                             </button>
+                            <button class="p-2 text-zinc-400 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-colors cursor-pointer" title="Share" onclick="openModalForShare('${file?._id}')">
+                                <i class="ri-share-line pointer-events-none"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>`;
@@ -216,37 +217,64 @@ export async function fetchFiles(category, query = "") {
     }
 }
 
+async function filterFilesByCategory() {
+    // Filter files by category buttons
+    const categoryAllFilesBtn = document.getElementById("category-all-files-btn");
+    const categoryVideoFilesBtn = document.getElementById("category-video-files-btn");
+    const categoryDocumentFilesBtn = document.getElementById("category-document-files-btn");
+    const categoryImageFilesBtn = document.getElementById("category-image-files-btn");
+    const categoryAudioFilesBtn = document.getElementById("category-audio-files-btn");
+
+    // Fetch files by category
+    categoryAllFilesBtn.addEventListener("click", () => fetchFiles());
+    categoryVideoFilesBtn.addEventListener("click", () => fetchFiles("video"));
+    categoryDocumentFilesBtn.addEventListener("click", () => fetchFiles("document"));
+    categoryImageFilesBtn.addEventListener("click", () => fetchFiles("image"));
+    categoryAudioFilesBtn.addEventListener("click", () => fetchFiles("audio"));
+}
+
+async function searchFile() {
+    const searchBar = document.getElementById("files-search-bar");
+
+    const searchFiles = debounce(fetchFiles, 400);
+
+    searchBar.addEventListener("keyup", (e) => {
+        const query = e.target.value?.trim();
+
+        if (!query) {
+            return searchFiles(currentFileCategory);
+        }
+
+        searchFiles(currentFileCategory, query);
+    });
+}
+
+window.openModalForShare = function (id) {
+    Swal.fire({
+        showConfirmButton: false,
+        html: `
+            <form onsubmit="shareFile('${id}', event)" class="text-left">
+                <h2 class="text-2xl font-medium text-zinc-700 text-left mb-6">Send File</h2>
+                <label class="text-base" for="email">Receiver Email:</label>
+                <input id="email" class="w-full p-2.5 border-1 border-zinc-300 rounded-md text-lg" type="email" placeholder="example@gmail.com" name="email" required />
+                <button class="mt-3 font-medium bg-indigo-400 hover:bg-indigo-500 duration-100 text-white px-6 py-3.5 rounded-md cursor-pointer flex gap-2 items-center">
+                    <i class="ri-send-ins-line"></i> Send
+                </button>
+            </form>
+        `,
+    });
+};
+
+window.shareFile = async function (id, e) {
+    e.preventDefault();
+    const email = e.target.email?.value;
+
+    alert(email);
+};
+
 window.onload = () => {
     fetchFiles();
     uploadFile();
+    filterFilesByCategory();
+    searchFile();
 };
-
-// Filter files by category buttons
-const categoryAllFilesBtn = document.getElementById("category-all-files-btn");
-const categoryVideoFilesBtn = document.getElementById("category-video-files-btn");
-const categoryDocumentFilesBtn = document.getElementById("category-document-files-btn");
-const categoryImageFilesBtn = document.getElementById("category-image-files-btn");
-const categoryAudioFilesBtn = document.getElementById("category-audio-files-btn");
-
-// Fetch files by category
-categoryAllFilesBtn.addEventListener("click", () => fetchFiles());
-categoryVideoFilesBtn.addEventListener("click", () => fetchFiles("video"));
-categoryDocumentFilesBtn.addEventListener("click", () => fetchFiles("document"));
-categoryImageFilesBtn.addEventListener("click", () => fetchFiles("image"));
-categoryAudioFilesBtn.addEventListener("click", () => fetchFiles("audio"));
-
-// Search file
-import { debounce } from "../utils.js";
-const searchBar = document.getElementById("files-search-bar");
-
-const searchFiles = debounce(fetchFiles, 400);
-
-searchBar.addEventListener("keyup", (e) => {
-    const query = e.target.value?.trim();
-
-    if (!query) {
-        return searchFiles(currentFileCategory);
-    }
-
-    searchFiles(currentFileCategory, query);
-});

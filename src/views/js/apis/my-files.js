@@ -2,6 +2,7 @@ import api from "./axios.js";
 import formatFileSize from "../formatFileSize.js";
 import { ORIGIN } from "../config.js";
 import { closeDrawer } from "../my-files.js";
+import { currentFileCategory } from "../my-files.js";
 
 const notyf = new Notyf({
     position: { x: "center", y: "top" },
@@ -38,8 +39,6 @@ function deleteFile() {
         });
     });
 }
-
-import { currentFileCategory } from "../my-files.js";
 
 // Upload file
 function uploadFile() {

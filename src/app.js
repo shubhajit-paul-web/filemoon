@@ -46,12 +46,14 @@ import authRoutes from "./routes/v1/auth.routes.js";
 import userRoutes from "./routes/v1/user.routes.js";
 import fileRoutes from "./routes/v1/file.routes.js";
 import dashboardRoutes from "./routes/v1/dashboard.routes.js";
+import shareRoutes from "./routes/v1/share.routes.js";
 
 // Routes declarations (API Endpoints)
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/files", fileRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/shares", shareRoutes);
 
 // 404 handler
 app.use(notFoundMiddleware);

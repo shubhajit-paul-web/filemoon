@@ -15,4 +15,8 @@ export default Object.freeze({
         ACCESS_TOKEN_EXPIRATION: process.env.ACCESS_TOKEN_EXPIRATION || "1h",
         REFRESH_TOKEN_EXPIRATION: process.env.REFRESH_TOKEN_EXPIRATION || "60d",
     },
+    SMTP: {
+        EMAIL: process.env.SMTP_EMAIL,
+        PASS: process.env.SMTP_PASS,
+    },
 });

@@ -15,26 +15,32 @@ function deleteFile() {
     deleteFileBtns.forEach((btn) => {
         btn.addEventListener("click", async (e) => {
             const fileId = e.target.dataset?.fileId;
-            const fileName = e.target.dataset?.fileName;
 
             if (fileId) {
-                const ans = confirm(`Do you want to delete ${fileName} file?`);
+                Swal.fire({
+                    title: "Do you want to delete this file?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        try {
+                            const res = await api.delete(`/files/${fileId}`);
 
-                if (ans) {
-                    try {
-                        const res = await api.delete(`/files/${fileId}`);
+                            if (res.status === 200) {
+                                // remove the deleted file row from UI
+                                document.getElementById(`file-${fileId}`)?.remove();
 
-                        if (res.status === 200) {
-                            notyf.success("File deleted successfully!");
-
-                            const deletedFileRow = document.getElementById(`file-${fileId}`);
-
-                            deletedFileRow?.remove();
+                                Swal.fire("File deleted successfully!", "", "success");
+                            }
+                        } catch (error) {
+                            notyf.error(
+                                error.response ? error.response?.data?.message : error.message
+                            );
                         }
-                    } catch (error) {
-                        notyf.error(error.response?.data?.message);
                     }
-                }
+                });
             }
         });
     });

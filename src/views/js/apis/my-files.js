@@ -201,7 +201,7 @@ export async function fetchFiles(category, query = "") {
                             <button class="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer delete-file-btn" title="Delete" data-file-id="${file?._id}" data-file-name="${file?.fileName}">
                                 <i class="ri-delete-bin-line pointer-events-none"></i>
                             </button>
-                            <button class="p-2 text-zinc-400 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-colors cursor-pointer" title="Share" onclick="openModalForShare('${file?._id}')">
+                            <button class="p-2 text-zinc-400 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-colors cursor-pointer" title="Share" onclick="openModalForShare('${file?._id}', '${file?.fileName}')">
                                 <i class="ri-share-line pointer-events-none"></i>
                             </button>
                         </div>
@@ -249,7 +249,7 @@ async function searchFile() {
     });
 }
 
-window.openModalForShare = function (id) {
+window.openModalForShare = function (id, fileName) {
     Swal.fire({
         showConfirmButton: false,
         html: `
@@ -257,9 +257,13 @@ window.openModalForShare = function (id) {
                 <h2 class="text-2xl font-medium text-zinc-700 text-left mb-6">Send File</h2>
                 <label class="text-base" for="email">Receiver Email:</label>
                 <input id="email" class="w-full p-2.5 border-1 border-zinc-300 rounded-md text-lg" type="email" placeholder="example@gmail.com" name="email" required />
-                <button class="mt-3 font-medium bg-indigo-400 hover:bg-indigo-500 duration-100 text-white px-6 py-3.5 rounded-md cursor-pointer flex gap-2 items-center">
+                <button class="mt-3.5 font-medium bg-indigo-400 hover:bg-indigo-500 duration-100 text-white px-6 py-3.5 rounded-md cursor-pointer flex gap-2 items-center">
                     <i class="ri-send-ins-line"></i> Send
                 </button>
+                <div class="mt-6">
+                    <span>You are sharing - </span>
+                    <span class="text-green-500 text-medium">${fileName}</span>
+                </div>
             </form>
         `,
     });
@@ -267,9 +271,49 @@ window.openModalForShare = function (id) {
 
 window.shareFile = async function (id, e) {
     e.preventDefault();
-    const email = e.target.email?.value;
+    const form = e.target;
+    const emailInputField = form.email;
+    const email = emailInputField?.value;
+    const sendBtn = form.elements[1];
 
-    alert(email);
+    if (!email) {
+        emailInputField.focus();
+        return notyf.error("Email is required!");
+    }
+
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = `<i class="ri-loader-2-fill animate-spin"></i> Sending...`;
+    sendBtn.classList.add("opacity-60");
+
+    try {
+        const res = await api.post("/shares", {
+            email,
+            fileId: id,
+        });
+
+        if (res.status === 201) {
+            Swal.fire({
+                title: "File shared successfully",
+                icon: "success",
+            });
+        }
+    } catch (error) {
+        if (error.response.data?.errorCode === "VALIDATION_ERROR") {
+            const err = error.response.data.errors[0];
+
+            if (err?.path === "email") {
+                emailInputField.focus();
+            }
+
+            return notyf.error(err?.msg);
+        }
+
+        notyf.error(error.response ? error.response.data?.message : error.message);
+    } finally {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = `<i class="ri-send-ins-line"></i> Send`;
+        sendBtn.classList.remove("opacity-60");
+    }
 };
 
 window.onload = () => {

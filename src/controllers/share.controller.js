@@ -4,9 +4,11 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { StatusCodes } from "http-status-codes";
 
 const shareFile = asyncHandler(async (req, res) => {
-    await shareService.shareFile(req.body);
+    const createdShare = await shareService.shareFile(req.user?.id, req.body);
 
-    return res.status(StatusCodes.OK).json(ApiResponse.success("File shared successfully"));
+    return res
+        .status(StatusCodes.CREATED)
+        .json(ApiResponse.created("File shared successfully", createdShare));
 });
 
 export default { shareFile };

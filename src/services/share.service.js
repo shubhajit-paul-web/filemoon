@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
+import Share from "../models/share.model.js";
 import ApiError from "../utils/ApiError.js";
 import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
@@ -293,8 +294,9 @@ const getEmailTemplate = (fileLink) => {
     `;
 };
 
-const shareFile = async (payload) => {
-    const { email, fileId } = payload;
+const shareFile = async (userId, payload) => {
+    let { email, fileId } = payload;
+    email = email.trim();
 
     try {
         await transporter.sendMail({
@@ -303,8 +305,14 @@ const shareFile = async (payload) => {
             subject: "Filemoon - New file received",
             html: getEmailTemplate(),
         });
+
+        return await Share.create({
+            from: userId,
+            to: email,
+            file: fileId,
+        });
     } catch (error) {
-        console.log(error);
+        console.error(error);
 
         throw new ApiError(
             StatusCodes.INTERNAL_SERVER_ERROR,

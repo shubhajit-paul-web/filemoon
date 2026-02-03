@@ -1,9 +1,14 @@
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
+import jwt from "jsonwebtoken";
+import moment from "moment/moment.js";
+import File from "../models/file.model.js";
+import User from "../models/user.model.js";
 import Share from "../models/share.model.js";
 import ApiError from "../utils/ApiError.js";
 import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
+import formatFileSize from "../views/js/formatFileSize.js";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -13,303 +18,191 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const getEmailTemplate = (fileLink) => {
+const getEmailTemplate = ({
+    senderName,
+    senderEmail,
+    fileName,
+    size,
+    expiryDate,
+    downloadLink,
+}) => {
     return `
-        <body
-		style="
-			margin: 0;
-			padding: 0;
-			background-color: #f3f4f6;
-			font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif;
-			-webkit-font-smoothing: antialiased;
-			-moz-osx-font-smoothing: grayscale;
-		">
-		<!-- Preview Text (hidden) -->
-		<div style="display: none; max-height: 0; overflow: hidden; mso-hide: all">
-			{{sender_email}} has shared a file with you on Filemoon. Click to download securely.
-			&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
-		</div>
+	<body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #1e293b;">
 
-		<!-- Email Wrapper -->
-		<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6">
-			<tr>
-				<td align="center" style="padding: 40px 16px">
-					<!-- Main Container -->
-					<table
-						role="presentation"
-						width="100%"
-						cellpadding="0"
-						cellspacing="0"
-						style="
-							max-width: 560px;
-							background-color: #ffffff;
-							border-radius: 12px;
-							box-shadow:
-								0 4px 6px -1px rgba(0, 0, 0, 0.1),
-								0 2px 4px -1px rgba(0, 0, 0, 0.06);
-							overflow: hidden;
-						">
-						<!-- Header with Gradient -->
-						<tr>
-							<td style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 32px 40px; text-align: center">
-								<!-- Logo -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center">
-											<div style="display: inline-block; background-color: rgba(255, 255, 255, 0.15); padding: 12px 16px; border-radius: 10px">
-												<span style="font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px">🌙 Filemoon</span>
-											</div>
-											<p style="margin: 12px 0 0; font-size: 14px; color: rgba(255, 255, 255, 0.85); font-weight: 400">Secure File Sharing Platform</p>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
+    <!-- Email Wrapper -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fafc">
+        <tr>
+            <td align="center" style="padding: 48px 20px">
+                
+                <!-- Main Container -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    
+                    <!-- Top Branding -->
+                    <tr>
+                        <td style="padding: 32px 40px 0;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <span style="font-size: 16px; font-weight: 700; color: #4f46e5; letter-spacing: -0.01em;"> Filemoon</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-						<!-- Main Content -->
-						<tr>
-							<td style="padding: 40px 40px 32px">
-								<!-- Notification Badge -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center" style="padding-bottom: 24px">
-											<span
-												style="
-													display: inline-block;
-													background-color: #dbeafe;
-													color: #1e40af;
-													font-size: 12px;
-													font-weight: 600;
-													padding: 6px 14px;
-													border-radius: 20px;
-													text-transform: uppercase;
-													letter-spacing: 0.5px;
-												">
-												📥 New File Received
-											</span>
-										</td>
-									</tr>
-								</table>
+                    <!-- Header Section -->
+                    <tr>
+                        <td style="padding: 32px 40px;">
+                            <h1 style="margin: 0; font-size: 22px; font-weight: 600; line-height: 1.3; color: #0f172a;">
+                                <span style="text-transform: capitalize;">${senderName}</span> shared a file with you
+                            </h1>
+                            <p style="margin: 10px 0 0; font-size: 15px; color: #64748b; line-height: 1.5;">
+                                A secure link has been generated for your access. Review the details below to download.
+                            </p>
+                        </td>
+                    </tr>
 
-								<!-- Greeting -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td style="text-align: center; padding-bottom: 24px">
-											<h1 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #111827; line-height: 1.3">Someone shared a file with you</h1>
-											<p style="margin: 0; font-size: 15px; color: #6b7280; line-height: 1.5">You've received a secure file transfer</p>
-										</td>
-									</tr>
-								</table>
+                    <!-- Professional File Card -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden;">
+                                <!-- Sender Info -->
+                                <tr>
+                                    <td style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9; background-color: #fbfcfd;">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="font-size: 13px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">Shared By</td>
+                                                <td align="right" style="font-size: 14px; color: #475569;">${senderEmail}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!-- File Info -->
+                                <tr>
+                                    <td style="padding: 24px 20px;">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td width="40" valign="top">
+                                                    <div style="width: 36px; height: 36px; background-color: #eef2ff; border-radius: 8px; text-align: center; line-height: 36px;">
+                                                        <span style="font-size: 18px;">📄</span>
+                                                    </div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 2px;">${fileName}</div>
+                                                    <div style="font-size: 13px; color: #64748b;">${formatFileSize(size)} &bull; Expiring on ${moment(expiryDate).format("Do MMM YYYY, hh:mm a")}</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-								<!-- Sender Card -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border-radius: 10px; margin-bottom: 24px">
-									<tr>
-										<td style="padding: 20px">
-											<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-												<tr>
-													<td width="48" valign="top">
-														<!-- Avatar Circle -->
-														<div
-															style="
-																width: 44px;
-																height: 44px;
-																background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-																border-radius: 50%;
-																text-align: center;
-																line-height: 44px;
-															">
-															<span style="color: #ffffff; font-size: 18px; font-weight: 600">{{sender_initial}}</span>
-														</div>
-													</td>
-													<td style="padding-left: 14px; vertical-align: middle">
-														<p style="margin: 0 0 2px; font-size: 14px; font-weight: 600; color: #111827">Shared by</p>
-														<p style="margin: 0; font-size: 14px; color: #4b5563">{{sender_email}}</p>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
+                    <!-- Primary Action -->
+                    <tr>
+                        <td style="padding: 32px 40px 40px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <a href="${downloadLink}" target="_blank" style="display: block; background-color: #4f46e5; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 24px; border-radius: 8px; text-align: center;">
+                                            Download File
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 20px; text-align: center;">
+                                        <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+                                            🔒 This is a secure, encrypted transfer.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
 
-								<!-- File Details Card -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 24px">
-									<tr>
-										<td style="padding: 20px">
-											<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-												<tr>
-													<td width="48" valign="top">
-														<!-- File Icon -->
-														<div style="width: 44px; height: 44px; background-color: #eff6ff; border-radius: 10px; text-align: center; line-height: 44px">
-															<span style="font-size: 20px">📄</span>
-														</div>
-													</td>
-													<td style="padding-left: 14px; vertical-align: middle">
-														<p style="margin: 0 0 4px; font-size: 15px; font-weight: 600; color: #111827">{{file_name}}</p>
-														<p style="margin: 0; font-size: 13px; color: #6b7280">{{file_size}}</p>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-
-								<!-- CTA Button -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center" style="padding-bottom: 24px">
-											<!--[if mso]>
-												<v:roundrect
-													xmlns:v="urn:schemas-microsoft-com:vml"
-													xmlns:w="urn:schemas-microsoft-com:office:word"
-													href="{{download_link}}"
-													style="height: 52px; v-text-anchor: middle; width: 280px"
-													arcsize="12%"
-													stroke="f"
-													fillcolor="#2563eb">
-													<w:anchorlock />
-													<center style="color: #ffffff; font-family: sans-serif; font-size: 16px; font-weight: bold">Download File</center>
-												</v:roundrect>
-											<![endif]-->
-											<!--[if !mso]><!-->
-											<a
-												href="{{download_link}}"
-												target="_blank"
-												style="
-													display: inline-block;
-													background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-													color: #ffffff;
-													text-decoration: none;
-													font-size: 15px;
-													font-weight: 600;
-													padding: 14px 48px;
-													border-radius: 8px;
-													box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.35);
-												">
-												⬇️&nbsp;&nbsp;Download File
-											</a>
-											<!--<![endif]-->
-										</td>
-									</tr>
-								</table>
-
-								<!-- Expiry Warning -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef3c7; border-radius: 8px; margin-bottom: 20px">
-									<tr>
-										<td style="padding: 14px 18px">
-											<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-												<tr>
-													<td width="24" valign="top">
-														<span style="font-size: 16px">⏰</span>
-													</td>
-													<td style="padding-left: 10px">
-														<p style="margin: 0; font-size: 13px; color: #92400e; line-height: 1.5"><strong>Link expires:</strong> {{expiry_date}}</p>
-													</td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-								</table>
-
-								<!-- Security Notice -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center" style="padding-top: 8px">
-											<p style="margin: 0; font-size: 12px; color: #9ca3af; line-height: 1.6">🔒 This link is private and can only be accessed by you</p>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-
-						<!-- Divider -->
-						<tr>
-							<td style="padding: 0 40px">
-								<div style="border-top: 1px solid #e5e7eb"></div>
-							</td>
-						</tr>
-
-						<!-- Footer -->
-						<tr>
-							<td style="padding: 28px 40px 32px">
-								<!-- Help Text -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center" style="padding-bottom: 20px">
-											<p style="margin: 0 0 6px; font-size: 13px; color: #6b7280; line-height: 1.6">
-												Questions about this file? Reply to this email or contact the sender directly.
-											</p>
-											<p style="margin: 0; font-size: 12px; color: #9ca3af; line-height: 1.5">If you don't recognize the sender, you can safely ignore this email.</p>
-										</td>
-									</tr>
-								</table>
-
-								<!-- Footer Links -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center" style="padding-bottom: 16px">
-											<a
-												href="{{help_link}}"
-												style="display: inline-block; color: #6b7280; text-decoration: none; font-size: 12px; padding: 0 10px; border-right: 1px solid #d1d5db"
-												>Help Center</a
-											>
-											<a
-												href="{{privacy_link}}"
-												style="display: inline-block; color: #6b7280; text-decoration: none; font-size: 12px; padding: 0 10px; border-right: 1px solid #d1d5db"
-												>Privacy Policy</a
-											>
-											<a href="{{terms_link}}" style="display: inline-block; color: #6b7280; text-decoration: none; font-size: 12px; padding: 0 10px">Terms of Service</a>
-										</td>
-									</tr>
-								</table>
-
-								<!-- Copyright -->
-								<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-									<tr>
-										<td align="center">
-											<p style="margin: 0 0 4px; font-size: 12px; color: #9ca3af">© 2026 Filemoon. All rights reserved.</p>
-											<p style="margin: 0; font-size: 11px; color: #d1d5db">Secure file sharing made simple.</p>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
-					<!-- End Main Container -->
-
-					<!-- Unsubscribe Link -->
-					<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 560px">
-						<tr>
-							<td align="center" style="padding: 24px 40px">
-								<p style="margin: 0; font-size: 11px; color: #9ca3af; line-height: 1.5">
-									You received this email because someone shared a file with you on Filemoon.<br />
-									<a href="{{unsubscribe_link}}" style="color: #6b7280; text-decoration: underline">Unsubscribe</a> from these notifications.
-								</p>
-							</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-	</body>
-    `;
+                    <!-- Footer Content -->
+                    <tr>
+                        <td style="padding: 32px 40px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; border-radius: 0 0 12px 12px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="padding-bottom: 16px;">
+                                        <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.5;">
+                                            Questions? Contact <a href="mailto:${senderEmail}" style="color: #4f46e5; text-decoration: none;">the sender</a> or visit our <a href="#" style="color: #4f46e5; text-decoration: none;">Help Center</a>.
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+                                            &copy; 2026 Filemoon Inc. All rights reserved.<br>
+                                            <a href="#" style="color: #94a3b8; text-decoration: underline;">Privacy Policy</a> &nbsp;&bull;&nbsp; <a href="#" style="color: #94a3b8; text-decoration: underline;">Unsubscribe</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <!-- End Main Container -->
+            </td>
+        </tr>
+    </table>
+</body>
+	`;
 };
 
-const shareFile = async (userId, payload) => {
-    let { email, fileId } = payload;
+const shareFile = async (user, payload) => {
+    const { id: senderId, email: senderEmail } = user;
+    let { email, fileId, expiry } = payload;
     email = email.trim();
 
+    // Fetch file and sender info
+    const [file, userInfo] = await Promise.all([
+        File.findById(fileId).select("fileName type size -_id").lean(),
+        User.findById(senderId).select("fullName -_id").lean(),
+    ]);
+
+    if (!file) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "File not found", errorCodes.NOT_FOUND);
+    }
+
+    // Token expiry in minutes
+    const timestamp = new Date(expiry).getTime() - Date.now();
+    const tokenExpiry = Math.floor(timestamp / 1000 / 60);
+
     try {
+        const createdShare = await Share.create({
+            from: senderId,
+            to: email,
+            file: fileId,
+            expiry,
+        });
+
+        // Token to access file
+        const fileAccessToken = jwt.sign(
+            {
+                shareId: createdShare?._id,
+                fileId,
+            },
+            config.JWT.FILE_ACCESS_TOKEN_SECRET,
+            { expiresIn: `${tokenExpiry}m` }
+        );
+
+        const downloadLink = `${config.SERVER_ORIGIN}/api/v1/files/${fileId}/download?token=${fileAccessToken}`;
+
         await transporter.sendMail({
             from: config.SMTP.EMAIL,
             to: email,
             subject: "Filemoon - New file received",
-            html: getEmailTemplate(),
-        });
-
-        return await Share.create({
-            from: userId,
-            to: email,
-            file: fileId,
+            html: getEmailTemplate({
+                senderName: userInfo.fullName,
+                fileName: file.fileName,
+                size: file.size,
+                expiryDate: expiry,
+                senderEmail,
+                downloadLink,
+            }),
         });
     } catch (error) {
         console.error(error);

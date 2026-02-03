@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 
 const checkResourceAccess = asyncHandler(async (req, res, next) => {
-    const file = await File.findById(req.params?.id);
+    const file = await File.findById(req.params?.id).lean();
 
     if (!file) {
         throw new ApiError(

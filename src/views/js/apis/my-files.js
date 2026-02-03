@@ -256,8 +256,10 @@ window.openModalForShare = function (id, fileName) {
             <form onsubmit="shareFile('${id}', event)" class="text-left">
                 <h2 class="text-2xl font-medium text-zinc-700 text-left mb-6">Send File</h2>
                 <label class="text-base" for="email">Receiver Email:</label>
-                <input id="email" class="w-full p-2.5 border-1 border-zinc-300 rounded-md text-lg" type="email" placeholder="example@gmail.com" name="email" required />
-                <button class="mt-3.5 font-medium bg-indigo-400 hover:bg-indigo-500 duration-100 text-white px-6 py-3.5 rounded-md cursor-pointer flex gap-2 items-center">
+                <input id="email" class="w-full p-2.5 border-1 border-zinc-300 rounded-md text-lg mb-2" type="email" placeholder="example@gmail.com" name="email" required />
+                <label class="text-base" for="expiry">Expiry:</label>
+                <input id="expiry" class="w-full p-2.5 border-1 border-zinc-300 rounded-md text-lg" type="datetime-local" name="expiry" required />
+                <button id="send-btn" class="mt-5 font-medium bg-indigo-400 hover:bg-indigo-500 duration-100 text-white px-6 py-3.5 rounded-md cursor-pointer flex gap-2 items-center">
                     <i class="ri-send-ins-line"></i> Send
                 </button>
                 <div class="mt-6">
@@ -273,22 +275,24 @@ window.shareFile = async function (id, e) {
     e.preventDefault();
     const form = e.target;
     const emailInputField = form.email;
+    const expiryInputField = form.expiry;
     const email = emailInputField?.value;
-    const sendBtn = form.elements[1];
-
-    if (!email) {
-        emailInputField.focus();
-        return notyf.error("Email is required!");
-    }
+    const expiry = expiryInputField?.value;
+    const sendBtn = form.querySelector("#send-btn");
 
     sendBtn.disabled = true;
     sendBtn.innerHTML = `<i class="ri-loader-2-fill animate-spin"></i> Sending...`;
     sendBtn.classList.add("opacity-60");
+    console.log({
+        email,
+        expiry,
+    });
 
     try {
         const res = await api.post("/shares", {
             email,
             fileId: id,
+            expiry,
         });
 
         if (res.status === 201) {

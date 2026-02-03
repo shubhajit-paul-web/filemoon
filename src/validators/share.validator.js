@@ -11,6 +11,11 @@ const createShareValidator = [
         .isEmail()
         .withMessage("Invalid email address")
         .toLowerCase(),
+    body("expiry")
+        .notEmpty()
+        .withMessage("Expiry is required")
+        .isISO8601({ strict: true })
+        .withMessage("Invalid datetime format"),
 
     respondWithValidationErrors,
 ];

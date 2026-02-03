@@ -18,6 +18,15 @@ const shareSchema = new Schema(
             ref: "File",
             required: true,
         },
+        expiry: {
+            type: Date,
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["active", "expired"],
+            default: "active",
+        },
     },
     { timestamps: true }
 );

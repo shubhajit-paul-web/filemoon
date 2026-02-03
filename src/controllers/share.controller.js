@@ -4,7 +4,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { StatusCodes } from "http-status-codes";
 
 const shareFile = asyncHandler(async (req, res) => {
-    const createdShare = await shareService.shareFile(req.user?.id, req.body);
+    const createdShare = await shareService.shareFile(req.user, req.body);
 
     return res
         .status(StatusCodes.CREATED)

@@ -4,6 +4,7 @@ import upload from "../../middlewares/upload.middleware.js";
 import validators from "../../validators/file.validator.js";
 import fileController from "../../controllers/file.controller.js";
 import checkResourceAccess from "../../middlewares/checkResourceAccess.middleware.js";
+import authFileAccess from "../../middlewares/authFileAccess.middleware.js";
 
 const router = Router();
 
@@ -50,9 +51,8 @@ router.get("/", authUser, validators.paginationValidator, fileController.fetchFi
 // (Private) GET /api/v1/files/:id/download
 router.get(
     "/:id/download",
-    authUser,
     validators.fileIdValidator,
-    checkResourceAccess,
+    authFileAccess,
     fileController.downloadFile
 );
 

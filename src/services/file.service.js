@@ -9,6 +9,7 @@ import axios from "axios";
 const createFile = async (userId, payload) => {
     const { file, fileName, description } = payload;
     const MAXIMUM_FILE_SIZE = 100 * 1024 * 1024; // 100mb
+    let fileType = file?.mimetype;
 
     if (!file?.buffer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "File is required", errorCodes.VALIDATION_ERROR);
@@ -28,6 +29,10 @@ const createFile = async (userId, payload) => {
         fileCategory = "document";
     }
 
+    if (fileType === "text/plain") {
+        fileType = "text/txt";
+    }
+
     const uploadedFile = await storageService.uploadFile(file);
 
     const createdFile = await File.create({
@@ -37,7 +42,7 @@ const createFile = async (userId, payload) => {
             url: uploadedFile?.url,
             fileId: uploadedFile?.fileId,
         },
-        type: file?.mimetype,
+        type: fileType,
         size: uploadedFile?.size,
         category: fileCategory,
         createdBy: userId,

@@ -113,17 +113,24 @@ async function loadMetrics() {
 }
 
 async function fetchRecentUploadedFiles() {
+    const recentFilesElem = document.getElementById("recent-files");
+    let recentFilesHTML = "";
+
     try {
-        const response = await api.get("/files?limit=5&sortBy=createdAt&sortType=desc");
+        const { data } = await api.get("/files?limit=5&sortBy=createdAt&sortType=desc");
+        const files = data.data;
 
-        if (response.status !== 200 || !response.data?.data) return;
+        if (files.length === 0) {
+            return (recentFilesElem.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-lg text-zinc-400 py-8">
+                        No files found!
+                    </td>
+                </tr>
+            `);
+        }
 
-        const data = response.data.data;
-
-        const recentFilesElem = document.getElementById("recent-files");
-        let recentFilesHTML = "";
-
-        data?.forEach((file) => {
+        files?.forEach((file) => {
             recentFilesHTML += `
                 <tr class="hover:bg-zinc-50/50 transition-colors">
                     <td class="px-6 py-4 font-medium text-zinc-800 flex items-center gap-3 max-w-md">

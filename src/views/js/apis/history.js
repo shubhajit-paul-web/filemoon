@@ -1,6 +1,10 @@
 import api from "../apis/axios.js";
 
-async function fetchShareHistory() {
+const toast = new Notyf({
+    position: { x: "center", y: "top" },
+});
+
+async function fetchShareHistory(page) {
     const sharesHistoryTable = document.getElementById("shares-history-table");
     let sharesHistoryTableContent = "";
 
@@ -25,8 +29,18 @@ async function fetchShareHistory() {
     };
 
     try {
-        const { data } = await api.get("/shares");
+        const { data } = await api.get(`/shares?page=${page}`);
         const shares = data.data;
+
+        if (shares.length === 0) {
+            return (sharesHistoryTable.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-lg text-zinc-500 py-6">
+                        No shares found!
+                    </td>
+                </tr>
+            `);
+        }
 
         shares.forEach((share) => {
             const { file } = share;
@@ -76,11 +90,37 @@ async function fetchShareHistory() {
         });
 
         if (sharesHistoryTableContent) {
+            paginateFileShares(data.meta);
             sharesHistoryTable.innerHTML = sharesHistoryTableContent;
         }
     } catch (error) {
-        console.error(error);
+        toast.error(error.response ? error.response.data?.message : error.message);
     }
+}
+
+async function paginateFileShares(meta) {
+    const paginationInfoElem = document.getElementById("pagination-info");
+    const prevBtn = document.getElementById("paginate-prev-btn");
+    const nextBtn = document.getElementById("paginate-next-btn");
+
+    // Show pagination info
+    paginationInfoElem.innerHTML = `
+        Showing <span class="font-medium text-zinc-800">${meta.skip + 1}</span> to
+        <span class="font-medium text-zinc-800">
+        ${Math.min(meta.skip + meta.limit, meta.skip + meta.currentPageSharesCount)}
+        </span> of
+        <span class="font-medium text-zinc-800">${meta.totalShares}</span> results
+    `;
+
+    prevBtn.disabled = !meta.hasPrevPage;
+    nextBtn.disabled = !meta.hasNextPage;
+
+    prevBtn.addEventListener("click", () => {
+        fetchShareHistory(meta.prevPage);
+    });
+    nextBtn.addEventListener("click", () => {
+        fetchShareHistory(meta.nextPage);
+    });
 }
 
 window.openModelForRevokeAccess = function (fileId) {

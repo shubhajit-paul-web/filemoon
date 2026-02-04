@@ -225,8 +225,8 @@ const shareFile = async (user, payload) => {
 };
 
 const fetchShares = async (userId, paginationQueries) => {
-    const page = parseInt(paginationQueries.page || 1);
-    const limit = parseInt(paginationQueries.limit || 10);
+    const page = parseInt(paginationQueries.page) || 1;
+    const limit = parseInt(paginationQueries.limit) || 10;
     const skip = (page - 1) * limit;
 
     const [totalShares, shares] = await Promise.all([
@@ -246,6 +246,7 @@ const fetchShares = async (userId, paginationQueries) => {
         limit,
         skip,
         totalShares,
+        totalPages,
         currentPageSharesCount: shares.length,
         hasNextPage: page < totalPages,
         hasPrevPage: page > 1,

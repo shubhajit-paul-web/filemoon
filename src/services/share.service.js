@@ -224,14 +224,36 @@ const shareFile = async (user, payload) => {
     }
 };
 
-const fetchShares = async (userId, pagination) => {
-    const shares = await Share.find({ from: userId })
-        .select("-from -updatedAt -__v")
-        .populate("file", "fileName type category -_id")
-        .sort({ createdAt: -1 })
-        .lean();
+const fetchShares = async (userId, paginationQueries) => {
+    const page = parseInt(paginationQueries.page || 1);
+    const limit = parseInt(paginationQueries.limit || 10);
+    const skip = (page - 1) * limit;
 
-    return shares;
+    const [totalShares, shares] = await Promise.all([
+        Share.countDocuments({ from: userId }),
+        Share.find({ from: userId })
+            .select("-from -updatedAt -__v")
+            .populate("file", "fileName type category -_id")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean(),
+    ]);
+
+    const totalPages = Math.ceil(totalShares / limit);
+    const pagination = {
+        page,
+        limit,
+        skip,
+        totalShares,
+        currentPageSharesCount: shares.length,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+        nextPage: page < totalPages ? page + 1 : null,
+        prevPage: page > 1 ? page - 1 : null,
+    };
+
+    return { shares, pagination };
 };
 
 export default { shareFile, fetchShares };

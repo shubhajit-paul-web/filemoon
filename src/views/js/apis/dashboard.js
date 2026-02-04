@@ -1,6 +1,30 @@
 import api from "./axios.js";
 import formatFileSize from "../formatFileSize.js";
 
+const toast = new Notyf({
+    position: { x: "center", y: "top" },
+});
+
+function returnFileIcon(category) {
+    let icon = "";
+
+    switch (category) {
+        case "video":
+            icon = '<i class="ri-video-line text-xl text-blue-500"></i>';
+            break;
+        case "image":
+            icon = '<i class="ri-image-line text-xl text-orange-700"></i>';
+            break;
+        case "document":
+            icon = '<i class="ri-file-pdf-line text-xl text-red-500"></i>';
+            break;
+        default:
+            icon = '<i class="ri-folder-music-line text-xl text-purple-500"></i>';
+    }
+
+    return icon;
+}
+
 async function loadMetrics() {
     try {
         const response = await api.get("/dashboard/metrics");
@@ -99,26 +123,6 @@ async function fetchRecentUploadedFiles() {
         const recentFilesElem = document.getElementById("recent-files");
         let recentFilesHTML = "";
 
-        function returnFileIcon(category) {
-            let icon = "";
-
-            switch (category) {
-                case "video":
-                    icon = '<i class="ri-video-line text-xl text-blue-500"></i>';
-                    break;
-                case "image":
-                    icon = '<i class="ri-image-line text-xl text-orange-700"></i>';
-                    break;
-                case "document":
-                    icon = '<i class="ri-file-pdf-line text-xl text-red-500"></i>';
-                    break;
-                default:
-                    icon = '<i class="ri-folder-music-line text-xl text-purple-500"></i>';
-            }
-
-            return icon;
-        }
-
         data?.forEach((file) => {
             recentFilesHTML += `
                 <tr class="hover:bg-zinc-50/50 transition-colors">
@@ -144,7 +148,48 @@ async function fetchRecentUploadedFiles() {
     }
 }
 
+async function fetchRecentShares() {
+    const table = document.getElementById("recent-shared-files");
+    let tableContent = "";
+
+    try {
+        const { data } = await api.get("/shares?limit=5");
+        const shares = data?.data;
+
+        if (shares.length === 0) {
+            return (table.innerHTML = `
+                <tr>
+                    <td colspan="2" class="text-center text-lg text-zinc-400 py-8">
+                        Shares not found!
+                    </td>
+                </tr>
+            `);
+        }
+
+        shares.forEach((share, index) => {
+            const file = share?.file;
+
+            tableContent += `
+                <tr class="hover:bg-zinc-50/50 transition-colors">
+                    <td class="pl-6 pr-3 py-3 text-zinc-800 max-w-[16rem]">
+                        <p class="line-clamp-1 font-medium" title="${file?.fileName}">${file?.fileName}</p>
+                        <p class="text-zinc-400 text-xs font-normal">
+                            <i class="ri-corner-down-right-fill"></i> ${share?.to}
+                        </p>
+                    </td>
+                    <td class="pl-5 pr-2 py-2.5">${moment(share?.createdAt).format("Do MMM YYYY, hh:mm a")}</td>
+                </tr>
+            `;
+        });
+
+        table.innerHTML = tableContent;
+    } catch (error) {
+        toast.error(error.response ? error.response.data.message : error.message);
+    }
+}
+
 window.onload = function () {
     loadMetrics();
     fetchRecentUploadedFiles();
+    fetchRecentShares();
 };

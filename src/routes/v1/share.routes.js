@@ -8,4 +8,7 @@ const router = Router();
 // (Private) POST /api/v1/shares
 router.post("/", authUser, validators.createShareValidator, shareController.shareFile);
 
+// (Private) GET /api/v1/shares
+router.get("/", authUser, shareController.fetchShares);
+
 export default router;

@@ -11,4 +11,12 @@ const shareFile = asyncHandler(async (req, res) => {
         .json(ApiResponse.created("File shared successfully", createdShare));
 });
 
-export default { shareFile };
+const fetchShares = asyncHandler(async (req, res) => {
+    const shares = await shareService.fetchShares(req.user.id, req.query);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("File Shares history fetched successfully", shares));
+});
+
+export default { shareFile, fetchShares };

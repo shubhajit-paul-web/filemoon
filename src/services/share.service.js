@@ -10,6 +10,15 @@ import { StatusCodes } from "http-status-codes";
 import errorCodes from "../utils/errorCodes.js";
 import formatFileSize from "../views/js/formatFileSize.js";
 
+// setInterval(
+//     async () => {
+//         const currentDateTime = Date.now();
+
+//         Share.updateMany({});
+//     },
+//     2 * 60 * 1000
+// );
+
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -215,4 +224,14 @@ const shareFile = async (user, payload) => {
     }
 };
 
-export default { shareFile };
+const fetchShares = async (userId, pagination) => {
+    const shares = await Share.find({ from: userId })
+        .select("-from -updatedAt -__v")
+        .populate("file", "fileName type category -_id")
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return shares;
+};
+
+export default { shareFile, fetchShares };

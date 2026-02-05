@@ -80,9 +80,17 @@ async function fetchShareHistory(page) {
                     </td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onclick="openModelForRevokeAccess('${share._id}')" class="py-1.5 px-2.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" title="Revoke Access">
-                                ${status ? '<i class="ri-close-circle-line text-lg"></i>' : ""}
-                            </button>
+                            ${
+                                status
+                                    ? `<button
+                                        onclick="openModelForRevokeAccess('${share._id}')"
+                                        class="py-1.5 px-2.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                        title="Revoke Access"
+                                    >
+                                        <i class="ri-close-circle-line text-lg"></i>
+                                    </button>`
+                                    : ""
+                            }
                         </div>
                     </td>
                 </tr>
@@ -123,7 +131,7 @@ async function paginateFileShares(meta) {
     });
 }
 
-window.openModelForRevokeAccess = function (fileId) {
+window.openModelForRevokeAccess = function (shareId) {
     Swal.fire({
         title: "Are you sure?",
         text: "You want to revoke the file access!",
@@ -132,16 +140,27 @@ window.openModelForRevokeAccess = function (fileId) {
         confirmButtonColor: "#d33",
         cancelButtonColor: "rgb(69, 71, 69)",
         confirmButtonText: "Yes, Revoke Access!",
-    }).then((result) => {
+    }).then(async (result) => {
         if (result.isConfirmed) {
-            Swal.fire({
-                title: "Access Revoked!",
-                text: "File access has been revoked successfully.",
-                icon: "success",
-            });
+            await revokeAccess(shareId);
         }
     });
 };
+
+async function revokeAccess(shareId) {
+    try {
+        await api.patch(`/shares/${shareId}/revoke-access`);
+        await fetchShareHistory();
+
+        Swal.fire({
+            title: "Access Revoked!",
+            text: "File access has been revoked successfully.",
+            icon: "success",
+        });
+    } catch (error) {
+        toast.error(error.response ? error.response.data?.message : error.message);
+    }
+}
 
 window.onload = async function () {
     fetchShareHistory();

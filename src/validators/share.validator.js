@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { isValidObjectId } from "mongoose";
 import respondWithValidationErrors from "../middlewares/validator.middleware.js";
 
@@ -20,4 +20,10 @@ const createShareValidator = [
     respondWithValidationErrors,
 ];
 
-export default { createShareValidator };
+const shareIdValidator = [
+    param("id").custom(isValidObjectId).withMessage("Invalid share id"),
+
+    respondWithValidationErrors,
+];
+
+export default { createShareValidator, shareIdValidator };

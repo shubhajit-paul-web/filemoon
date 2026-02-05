@@ -257,4 +257,28 @@ const fetchShares = async (userId, paginationQueries) => {
     return { shares, pagination };
 };
 
-export default { shareFile, fetchShares };
+const revokeAccess = async (userId, shareId) => {
+    const share = await Share.findOne({
+        _id: shareId,
+        from: userId,
+    });
+
+    if (!share) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Share not found", errorCodes.NOT_FOUND);
+    }
+
+    // const shareStatus = share.status?.toLowerCase();
+
+    if (share.status === "expired") {
+        throw new ApiError(
+            StatusCodes.CONFLICT,
+            "Access is already being revoked",
+            errorCodes.CONFLICT
+        );
+    }
+
+    share.status = "expired";
+    return await share.save();
+};
+
+export default { shareFile, fetchShares, revokeAccess };

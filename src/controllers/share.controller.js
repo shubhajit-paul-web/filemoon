@@ -19,4 +19,12 @@ const fetchShares = asyncHandler(async (req, res) => {
         .json(ApiResponse.success("File Shares history fetched successfully", shares, pagination));
 });
 
-export default { shareFile, fetchShares };
+const revokeAccess = asyncHandler(async (req, res) => {
+    const updatedShare = await shareService.revokeAccess(req.user.id, req.params?.id);
+
+    return res
+        .status(StatusCodes.OK)
+        .json(ApiResponse.success("Access revoked successfully", updatedShare));
+});
+
+export default { shareFile, fetchShares, revokeAccess };
